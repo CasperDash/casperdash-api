@@ -1,8 +1,8 @@
 const { CasperServiceByJsonRPC, CasperClient, DeployUtil } = require('casper-js-sdk');
-const { TESTNET_RPC_URL } = require('../../constants');
+const { RPC_URL } = require('../../constants');
 
-const casperServiceRPC = new CasperServiceByJsonRPC(TESTNET_RPC_URL);
-const casperClient = new CasperClient(TESTNET_RPC_URL);
+const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
+const casperClient = new CasperClient(RPC_URL);
 
 const getStateRootHash = async () => {
 	const latestBlockInfo = await casperServiceRPC.getLatestBlockInfo();
