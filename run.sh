@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Pulling lastest!"
-sudo git pull
+git pull
 
 echo "Installing packages!"
 npm install
