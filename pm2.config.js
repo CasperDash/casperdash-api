@@ -1,7 +1,7 @@
 module.exports = {
 	apps: [
 		{
-			name: 'casperdash-apo',
+			name: 'casperdash-api',
 			script: 'bin/www',
 			env_production: {
 				NODE_ENV: 'production',
