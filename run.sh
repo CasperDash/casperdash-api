@@ -6,4 +6,4 @@ echo "Installing packages!"
 npm install
 
 echo "Restart services!"
-pm2 restart bin/www
+pm2 restart pm2.config.js --env production
