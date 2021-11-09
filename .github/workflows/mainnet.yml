@@ -28,7 +28,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install packages and test
       run: |
-        npm ci
+        npm install --production
       env:
         CI: true 
   
@@ -44,4 +44,6 @@ jobs:
           host: ${{ secrets.AWS_MAINNET_HOST }}
           username: ${{ secrets.AWS_DEPLOY_USER }}
           key: ${{ secrets.AWS_KEY }}
-          script: sh run.sh
+          script: |
+            cd ~/stack/projects/casperdash-api
+            ./run.sh
