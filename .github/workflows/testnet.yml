@@ -5,8 +5,10 @@
 name: Node.js CI
 
 on:
+  push:
+    branches: [ feature/setup-ci-cd ] 
   pull_request:
-    branches: [ main ]
+    branches: [ feature/setup-ci-cd ]
 
 jobs:
   build:
@@ -39,13 +41,13 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_MAINNET_HOST }}
+          host: ${{ secrets.AWS_TESTNET_HOST }}
           username: ${{ secrets.AWS_DEPLOY_USER }}
           key: ${{ secrets.AWS_KEY }}
           script: |
             cd ~/stack/projects/casperdash-api
             git pull
-            ./run.sh
+            ./run-testnet.sh
 
   notification:
 
