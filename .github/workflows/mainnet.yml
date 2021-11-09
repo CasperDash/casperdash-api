@@ -50,7 +50,6 @@ jobs:
 
   notification:
 
-      name: Slack Notifs
       needs: [deploy]
       runs-on: ubuntu-latest
       steps:
@@ -60,3 +59,4 @@ jobs:
           env: 
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
             SLACK_COLOR: ${{ job.status }}
+            SLACK_FOOTER: Powered by CasperDash
