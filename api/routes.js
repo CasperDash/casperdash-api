@@ -21,5 +21,5 @@ module.exports = function (app) {
 	app.route('/tokens/getTokensInfo').get(tokenController.getTokens);
 	app.route('/token/:tokenAddress').get(tokenController.getToken);
 	// Validator
-	app.route('/validators').get(stakeController.getValidators);
+	app.route('/validators/:eraId?').get(stakeController.getValidators);
 };
