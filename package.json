@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "NODE_ENV=production PORT=3001  nodemon server.js",
-		"dev": "NODE_ENV=production PORT=3001 nodemon server.js"
+		"dev": "NODE_ENV=production PORT=3001 nodemon server.js",
+		"mainnet": "NODE_ENV=production PORT=3001 TESTNET_RPC_URL=http://3.225.191.9:7777/rpc node server.js"
 	},
 	"author": "",
 	"license": "ISC",
