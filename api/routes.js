@@ -4,6 +4,7 @@ module.exports = function (app) {
 	const keyManagerController = require('./controllers/KeyManagerController');
 	const deployController = require('./controllers/DeployController');
 	const tokenController = require('./controllers/TokenController');
+	const blockController = require('./controllers/StakeController');
 	// Configuration
 	app.route('/configuration').get(configController.get);
 	// User
@@ -19,4 +20,6 @@ module.exports = function (app) {
 	//Token
 	app.route('/tokens/getTokensInfo').get(tokenController.getTokens);
 	app.route('/token/:tokenAddress').get(tokenController.getToken);
+	// Validator
+	app.route('/validators').get(blockController.getValidators);
 };
