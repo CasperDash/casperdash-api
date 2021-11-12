@@ -1,15 +1,47 @@
 const { casperServiceRPC } = require('./CasperServices');
 
-const getValidators = async () => {
+/**
+ * Retrive the era validators with bid information by eraId. If eraId not give, then get current eraId.
+ * @param {Number} eraId
+ * @returns
+ */
+const getValidators = async (eraId) => {
 	try {
+		let validatorsWithBidInfo = [];
+		if (!eraId) {
+			const currentEraId = await getCurrentEraId();
+			if (!currentEraId) {
+				return validatorsWithBidInfo;
+			}
+			eraId = currentEraId;
+		}
+
 		const { auction_state } = await casperServiceRPC.getValidatorsInfo(); // Reference schema: https://github.com/casper-network/casper-node/blob/release-1.4.1/resources/test/rpc_schema_hashing_V2.json#L4073
+		if (!auction_state) {
+			return validatorsWithBidInfo;
+		}
+
 		const { era_validators: eraValidators, bids } = auction_state;
-		const { validator_weights: validatorWeights } = eraValidators[1];
-		const validatorWithBidInfo = massageValidators(validatorWeights, bids);
-		return validatorWithBidInfo;
+		const eraValidator = eraValidators.find((eValidator) => eValidator.era_id == eraId);
+		if (!eraValidator) {
+			return validatorsWithBidInfo;
+		}
+
+		const { validator_weights: validatorWeights } = eraValidator;
+		if (!validatorWeights) {
+			return validatorsWithBidInfo;
+		}
+
+		validatorsWithBidInfo = massageValidators(validatorWeights, bids);
+		return validatorsWithBidInfo;
 	} catch (error) {
 		throw error;
 	}
+};
+
+const getCurrentEraId = async () => {
+	const { block } = await casperServiceRPC.getLatestBlockInfo();
+	return block.header ? block.header.era_id : null;
 };
 
 const massageValidators = (validatorWeights, bids) => {
