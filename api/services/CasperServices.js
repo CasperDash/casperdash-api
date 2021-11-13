@@ -13,6 +13,7 @@ const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
 const casperClient = new CasperClient(RPC_URL);
 
 const getStateRootHash = async () => {
+	console.log(RPC_URL);
 	const latestBlockInfo = await casperServiceRPC.getLatestBlockInfo();
 	const stateRootHash = await casperServiceRPC.getStateRootHash(latestBlockInfo.block.hash);
 	return stateRootHash;
@@ -95,14 +96,18 @@ const getStateKeyValue = async (stateRootHash, stateKey, statePath) => {
 	return value;
 };
 
+const createRecipientAddress = (publicKey) => {
+	const pbKey = CLPublicKey.fromHex(publicKey);
+	return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
+};
+
 /**
  * Get base64 value of account hash
  * @param {String} publicKey - Public key.
  * @return {String} Base64 value.
  */
 const getAccountHashBase64 = (publicKey) => {
-	const clPublicKey = CLPublicKey.fromHex(publicKey);
-	const key = new CLKey(new CLAccountHash(clPublicKey.toAccountHash()));
+	const key = createRecipientAddress(publicKey);
 	const keyBytes = CLValueParsers.toBytes(key).unwrap();
 	return Buffer.from(keyBytes).toString('base64');
 };
@@ -127,19 +132,16 @@ const dictionaryValueGetter = async (stateRootHash, dictionaryItemKey, seedUref)
  * Get contract named key uref
  * @param {String} stateRootHash - Root hash of global state at a recent block.
  * @param {String} contractHash - Contract hash.
- * @param {String} name - name key.
+ * @param {Array} namedKeys - list named key.
  * @return {Object} Dictionary value.
  */
-const getContractNamedKeyUref = async (stateRootHash, contractHash, name) => {
+const getContractNamedKeyUref = async (stateRootHash, contractHash, namedKeys = []) => {
 	const formattedContractHash = `hash-${contractHash}`;
 	const stateValue = await getStateValue(stateRootHash, formattedContractHash, []);
 	const { Contract } = stateValue;
-	const namedKeyObj =
-		Contract &&
-		Contract.namedKeys &&
-		Contract.namedKeys.length &&
-		Contract.namedKeys.find((namedKey) => namedKey.name === name);
-	return namedKeyObj ? namedKeyObj.key : undefined;
+	return Contract && Contract.namedKeys && Contract.namedKeys.length
+		? Contract.namedKeys.filter((namedKey) => namedKeys.includes(namedKey.name))
+		: [];
 };
 
 module.exports = {
@@ -154,4 +156,5 @@ module.exports = {
 	getAccountHashBase64,
 	dictionaryValueGetter,
 	getContractNamedKeyUref,
+	createRecipientAddress,
 };

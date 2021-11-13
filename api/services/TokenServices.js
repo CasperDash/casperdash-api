@@ -69,9 +69,11 @@ const getTokensBalanceByPublicKey = async (tokenAddressList, publicKey) => {
 				.map(async (address) => {
 					let balance;
 					try {
-						const balanceUref = await getContractNamedKeyUref(stateRootHash, address, 'balances');
+						const [balanceUref] = await getContractNamedKeyUref(stateRootHash, address, ['balances']);
 						const accountDictKey = getAccountHashBase64(publicKey);
-						balance = await dictionaryValueGetter(stateRootHash, accountDictKey, balanceUref);
+						balance = balanceUref
+							? await dictionaryValueGetter(stateRootHash, accountDictKey, balanceUref.key)
+							: 0;
 					} catch (error) {
 						balance = 0;
 					}
