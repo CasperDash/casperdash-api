@@ -13,6 +13,7 @@ const NFT_CONFIG = {
 					{ key: 'name', name: 'Name' },
 					{ key: 'rim', name: 'Rim' },
 					{ key: 'year', name: 'Year' },
+					{ key: 'wood', name: 'Wood' },
 				],
 			},
 			commissions: {

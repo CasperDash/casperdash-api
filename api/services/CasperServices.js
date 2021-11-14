@@ -13,7 +13,6 @@ const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
 const casperClient = new CasperClient(RPC_URL);
 
 const getStateRootHash = async () => {
-	console.log(RPC_URL);
 	const latestBlockInfo = await casperServiceRPC.getLatestBlockInfo();
 	const stateRootHash = await casperServiceRPC.getStateRootHash(latestBlockInfo.block.hash);
 	return stateRootHash;
@@ -120,12 +119,16 @@ const getAccountHashBase64 = (publicKey) => {
  * @return {Object} Dictionary value.
  */
 const dictionaryValueGetter = async (stateRootHash, dictionaryItemKey, seedUref) => {
-	const storedValue = await casperClient.nodeClient.getDictionaryItemByURef(
-		stateRootHash,
-		dictionaryItemKey,
-		seedUref,
-	);
-	return storedValue && storedValue.CLValue ? storedValue.CLValue.value() : {};
+	try {
+		const storedValue = await casperClient.nodeClient.getDictionaryItemByURef(
+			stateRootHash,
+			dictionaryItemKey,
+			seedUref,
+		);
+		return storedValue && storedValue.CLValue ? storedValue.CLValue.value() : {};
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 /**
