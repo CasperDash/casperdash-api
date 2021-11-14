@@ -1,4 +1,4 @@
-const { casperServiceRPC } = require('./CasperServices');
+const { casperServiceRPC, getCurrentEraId } = require('./CasperServices');
 
 /**
  * Retrive the era validators with bid information by eraId. If eraId not give, then get current eraId.
@@ -37,11 +37,6 @@ const getValidators = async (eraId) => {
 	} catch (error) {
 		throw error;
 	}
-};
-
-const getCurrentEraId = async () => {
-	const { block } = await casperServiceRPC.getLatestBlockInfo();
-	return block.header ? block.header.era_id : null;
 };
 
 const massageValidators = (validatorWeights, bids) => {
