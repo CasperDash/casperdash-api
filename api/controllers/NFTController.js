@@ -6,6 +6,7 @@ module.exports = {
 			const { tokenAddress, publicKey } = req.query;
 			if (!tokenAddress || !publicKey) {
 				res.json([]);
+				return;
 			}
 			const addresses = Array.isArray(tokenAddress) ? tokenAddress : [tokenAddress];
 			const NFTInfo = await getNFTInfo(addresses, publicKey);
