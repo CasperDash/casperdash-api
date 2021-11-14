@@ -1,4 +1,13 @@
-const { CasperServiceByJsonRPC, CasperClient, DeployUtil } = require('casper-js-sdk');
+const {
+	CasperServiceByJsonRPC,
+	CasperClient,
+	DeployUtil,
+	CLPublicKey,
+	CLKey,
+	CLAccountHash,
+	CLValueParsers,
+} = require('casper-js-sdk');
+
 const { RPC_URL } = require('../../constants');
 
 const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
@@ -67,6 +76,10 @@ const getDeploysStatus = async (deployHash) => {
 		: [];
 };
 
+const getStateValue = async (stateRootHash, stateKey, statePath) => {
+	return await casperClient.nodeClient.getBlockState(stateRootHash, stateKey, statePath);
+};
+
 /**
  * Returns value of a key associated with global storage.
  * @param {String} stateRootHash - Root hash of global state at a recent block.
@@ -78,9 +91,61 @@ const getStateKeyValue = async (stateRootHash, stateKey, statePath) => {
 	// Chain query: get global state key value.
 	const {
 		CLValue: { data: value },
-	} = await casperClient.nodeClient.getBlockState(stateRootHash, stateKey, [statePath]);
+	} = await getStateValue(stateRootHash, stateKey, [statePath]);
 
 	return value;
+};
+
+const createRecipientAddress = (publicKey) => {
+	const pbKey = CLPublicKey.fromHex(publicKey);
+	return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
+};
+
+/**
+ * Get base64 value of account hash
+ * @param {String} publicKey - Public key.
+ * @return {String} Base64 value.
+ */
+const getAccountHashBase64 = (publicKey) => {
+	const key = createRecipientAddress(publicKey);
+	const keyBytes = CLValueParsers.toBytes(key).unwrap();
+	return Buffer.from(keyBytes).toString('base64');
+};
+
+/**
+ * get dictionary value
+ * @param {String} stateRootHash - Root hash of global state at a recent block.
+ * @param {String} dictionaryItemKey - dictionary item key.
+ * @param {String} seedUref - Uref.
+ * @return {Object} Dictionary value.
+ */
+const dictionaryValueGetter = async (stateRootHash, dictionaryItemKey, seedUref) => {
+	try {
+		const storedValue = await casperClient.nodeClient.getDictionaryItemByURef(
+			stateRootHash,
+			dictionaryItemKey,
+			seedUref,
+		);
+		return storedValue && storedValue.CLValue ? storedValue.CLValue.value() : {};
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+/**
+ * Get contract named key uref
+ * @param {String} stateRootHash - Root hash of global state at a recent block.
+ * @param {String} contractHash - Contract hash.
+ * @param {Array} namedKeys - list named key.
+ * @return {Object} Dictionary value.
+ */
+const getContractNamedKeyUref = async (stateRootHash, contractHash, namedKeys = []) => {
+	const formattedContractHash = `hash-${contractHash}`;
+	const stateValue = await getStateValue(stateRootHash, formattedContractHash, []);
+	const { Contract } = stateValue;
+	return Contract && Contract.namedKeys && Contract.namedKeys.length
+		? Contract.namedKeys.filter((namedKey) => namedKeys.includes(namedKey.name))
+		: [];
 };
 
 module.exports = {
@@ -92,4 +157,8 @@ module.exports = {
 	getDeploysStatus,
 	getLatestBlockHash,
 	getStateKeyValue,
+	getAccountHashBase64,
+	dictionaryValueGetter,
+	getContractNamedKeyUref,
+	createRecipientAddress,
 };

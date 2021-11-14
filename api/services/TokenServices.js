@@ -1,5 +1,11 @@
 const { CLPublicKey } = require('casper-js-sdk');
-const { getStateKeyValue, getStateRootHash } = require('./CasperServices');
+const {
+	getStateKeyValue,
+	getStateRootHash,
+	getAccountHashBase64,
+	dictionaryValueGetter,
+	getContractNamedKeyUref,
+} = require('./CasperServices');
 const { ERC20_TOKEN_ATTRS } = require('../../constants');
 
 /**
@@ -56,17 +62,18 @@ const getTokensBalanceByPublicKey = async (tokenAddressList, publicKey) => {
 	const addresses = Array.isArray(tokenAddressList) ? tokenAddressList : [tokenAddressList];
 	try {
 		const stateRootHash = await getStateRootHash();
-		const publicKeyCL = CLPublicKey.fromHex(publicKey);
-		const accountHash = publicKeyCL.toAccountHashStr().replace('account-hash-', '');
-		const balanceKey = `balances_${accountHash}`;
+
 		return await Promise.all(
 			addresses
 				.filter((addr) => addr)
 				.map(async (address) => {
-					const formattedAddress = `hash-${address}`;
 					let balance;
 					try {
-						balance = await getStateKeyValue(stateRootHash, formattedAddress, balanceKey);
+						const [balanceUref] = await getContractNamedKeyUref(stateRootHash, address, ['balances']);
+						const accountDictKey = getAccountHashBase64(publicKey);
+						balance = balanceUref
+							? await dictionaryValueGetter(stateRootHash, accountDictKey, balanceUref.key)
+							: 0;
 					} catch (error) {
 						balance = 0;
 					}
