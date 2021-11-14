@@ -23,6 +23,11 @@ const getLatestBlockHash = async () => {
 	return latestBlockInfo.block.hash;
 };
 
+const getCurrentEraId = async () => {
+	const { block } = await casperServiceRPC.getLatestBlockInfo();
+	return block.header ? block.header.era_id : null;
+};
+
 const putDeploy = async (deployJson) => {
 	try {
 		const deploy = DeployUtil.deployFromJson(deployJson);
@@ -159,5 +164,6 @@ module.exports = {
 	getAccountHashBase64,
 	dictionaryValueGetter,
 	getContractNamedKeyUref,
+	getCurrentEraId,
 	createRecipientAddress,
 };
