@@ -100,14 +100,18 @@ const getStateKeyValue = async (stateRootHash, stateKey, statePath) => {
 	return value;
 };
 
+const createRecipientAddress = (publicKey) => {
+	const pbKey = CLPublicKey.fromHex(publicKey);
+	return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
+};
+
 /**
  * Get base64 value of account hash
  * @param {String} publicKey - Public key.
  * @return {String} Base64 value.
  */
 const getAccountHashBase64 = (publicKey) => {
-	const clPublicKey = CLPublicKey.fromHex(publicKey);
-	const key = new CLKey(new CLAccountHash(clPublicKey.toAccountHash()));
+	const key = createRecipientAddress(publicKey);
 	const keyBytes = CLValueParsers.toBytes(key).unwrap();
 	return Buffer.from(keyBytes).toString('base64');
 };
@@ -120,31 +124,32 @@ const getAccountHashBase64 = (publicKey) => {
  * @return {Object} Dictionary value.
  */
 const dictionaryValueGetter = async (stateRootHash, dictionaryItemKey, seedUref) => {
-	const storedValue = await casperClient.nodeClient.getDictionaryItemByURef(
-		stateRootHash,
-		dictionaryItemKey,
-		seedUref,
-	);
-	return storedValue && storedValue.CLValue ? storedValue.CLValue.value() : {};
+	try {
+		const storedValue = await casperClient.nodeClient.getDictionaryItemByURef(
+			stateRootHash,
+			dictionaryItemKey,
+			seedUref,
+		);
+		return storedValue && storedValue.CLValue ? storedValue.CLValue.value() : {};
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 /**
  * Get contract named key uref
  * @param {String} stateRootHash - Root hash of global state at a recent block.
  * @param {String} contractHash - Contract hash.
- * @param {String} name - name key.
+ * @param {Array} namedKeys - list named key.
  * @return {Object} Dictionary value.
  */
-const getContractNamedKeyUref = async (stateRootHash, contractHash, name) => {
+const getContractNamedKeyUref = async (stateRootHash, contractHash, namedKeys = []) => {
 	const formattedContractHash = `hash-${contractHash}`;
 	const stateValue = await getStateValue(stateRootHash, formattedContractHash, []);
 	const { Contract } = stateValue;
-	const namedKeyObj =
-		Contract &&
-		Contract.namedKeys &&
-		Contract.namedKeys.length &&
-		Contract.namedKeys.find((namedKey) => namedKey.name === name);
-	return namedKeyObj ? namedKeyObj.key : undefined;
+	return Contract && Contract.namedKeys && Contract.namedKeys.length
+		? Contract.namedKeys.filter((namedKey) => namedKeys.includes(namedKey.name))
+		: [];
 };
 
 module.exports = {
@@ -160,4 +165,5 @@ module.exports = {
 	dictionaryValueGetter,
 	getContractNamedKeyUref,
 	getCurrentEraId,
+	createRecipientAddress,
 };
