@@ -3,8 +3,12 @@ const { putDeploy, getDeploysStatus, getLatestBlockHash } = require('../services
 module.exports = {
 	deploy: async (req, res) => {
 		const body = req.body;
-		const hash = await putDeploy(body);
-		res.json({ deployHash: hash });
+		try {
+			const hash = await putDeploy(body);
+			res.json({ deployHash: hash });
+		} catch (error) {
+			res.status(500).json({ message: error.message });
+		}
 	},
 	getDeploysStatus: async (req, res) => {
 		try {
@@ -12,7 +16,6 @@ module.exports = {
 			const deploys = await getDeploysStatus(query.deployHash);
 			res.json(deploys);
 		} catch (error) {
-			console.log('error');
 			res.status(500).json({ message: error.message });
 		}
 	},

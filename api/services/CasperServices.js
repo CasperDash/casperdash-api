@@ -35,7 +35,7 @@ const putDeploy = async (deployJson) => {
 		const hash = await casperClient.putDeploy(deploy.val);
 		return hash;
 	} catch (error) {
-		console.log(error);
+		throw error;
 	}
 };
 
