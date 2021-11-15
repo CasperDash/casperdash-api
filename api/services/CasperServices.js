@@ -7,6 +7,7 @@ const {
 	CLAccountHash,
 	CLValueParsers,
 } = require('casper-js-sdk');
+
 const { RPC_URL } = require('../../constants');
 
 const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
