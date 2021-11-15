@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "NODE_ENV=production PORT=3001 RPC_URL=http://118.189.191.191:7777/rpc  nodemon server.js",
+		"start": "NODE_ENV=production PORT=3001 RPC_URL=http://16.162.124.124:7777/rpc  nodemon server.js",
 		"dev": "NODE_ENV=production PORT=3001 nodemon server.js",
 		"mainnet": "NODE_ENV=production PORT=3001 node server.js"
 	},
