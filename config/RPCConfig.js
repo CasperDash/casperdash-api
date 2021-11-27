@@ -14,5 +14,5 @@ const TEST_NET_RPC_URLS = [
 ];
 
 module.exports = {
-	RPC_URLS: process.env.NODE_ENV === 'testnet' ? TEST_NET_RPC_URLS : MAIN_NET_RPC_URLS,
+	RPC_URLS: process.env.NODE_ENV === 'mainnet' ? MAIN_NET_RPC_URLS : TEST_NET_RPC_URLS,
 };
