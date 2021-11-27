@@ -1,5 +1,5 @@
-// Current api server placed on Singapore, so prioritize Asia nodes first
-// TODO: Should get all available node from RPC api
+// Current api server placed in Singapore, so prioritize Asia nodes first
+// TODO: Should get all available nodes from RPC api
 const MAIN_NET_RPC_URLS = [
 	{ country: 'Singapore', ip: '134.209.110.11' },
 	{ country: 'Singapore', ip: '68.183.226.35' },

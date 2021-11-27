@@ -6,7 +6,7 @@ const buildURL = (ip) => `http://${ip}:7777/rpc`;
 const randomURLIndex = (rpcList) => Math.floor(Math.random() * rpcList.length);
 
 const getRPCURL = async (rpcURLList = RPC_URLS) => {
-	// random a rpc url at first time
+	// random a rpc url
 	const rpcURLIndex = randomURLIndex(rpcURLList);
 
 	const ip = rpcURLList[rpcURLIndex] && rpcURLList[rpcURLIndex].ip;
