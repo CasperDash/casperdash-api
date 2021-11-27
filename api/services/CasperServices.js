@@ -13,38 +13,68 @@ const { RPC_URL } = require('../../constants');
 const casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
 const casperClient = new CasperClient(RPC_URL);
 
+/**
+ * Returns root hash of global state at a recent block.
+ * @return {String} state root hash.
+ */
 const getStateRootHash = async () => {
 	const latestBlockInfo = await casperServiceRPC.getLatestBlockInfo();
-	const stateRootHash = await casperServiceRPC.getStateRootHash(latestBlockInfo.block.hash);
-	return stateRootHash;
+	return (
+		latestBlockInfo &&
+		latestBlockInfo.block &&
+		latestBlockInfo.block.header &&
+		latestBlockInfo.block.header.state_root_hash
+	);
 };
 
+/**
+ * Returns latest block hash.
+ * @return {String} latest block hash.
+ */
 const getLatestBlockHash = async () => {
 	const latestBlockInfo = await casperServiceRPC.getLatestBlockInfo();
 	return latestBlockInfo.block.hash;
 };
 
+/**
+ * Returns current era id.
+ * @return {String} era id.
+ */
 const getCurrentEraId = async () => {
 	const { block } = await casperServiceRPC.getLatestBlockInfo();
 	return block.header ? block.header.era_id : null;
 };
 
+/**
+ * Send deploy to network.
+ * @param {Object} deployJson - Deploy Json Object.
+ * @return {String} deploy hash.
+ */
 const putDeploy = async (deployJson) => {
 	try {
 		const deploy = DeployUtil.deployFromJson(deployJson);
 		const hash = await casperClient.putDeploy(deploy.val);
 		return hash;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
+/**
+ * Get deploy result.
+ * @param {String} deployHash - Deploy hash.
+ * @return {Object} deploy result.
+ */
 const getDeployResultJson = async (deployHash) => {
 	const deploy = await casperClient.getDeploy(deployHash);
-
-	return deploy[1];
+	return deploy.length && deploy[1];
 };
 
+/**
+ * Get deploy object by deploy hash.
+ * @param {String} deployHash - Deploy hash.
+ * @return {Object} Deploy object.
+ */
 const getDeployJson = async (deployHash) => {
 	const deploy = await casperClient.getDeploy(deployHash);
 	const jsonDeploy = DeployUtil.deployToJson(deploy[0]);
@@ -52,6 +82,11 @@ const getDeployJson = async (deployHash) => {
 	return jsonDeploy;
 };
 
+/**
+ * Get deploy object by deploy hash.
+ * @param {String} deployHash - Deploy hash.
+ * @return {Object} Deploy object.
+ */
 const getDeploysResult = async (deployHash) => {
 	const hashes = Array.isArray(deployHash) ? deployHash : [deployHash];
 	const deploys = await Promise.all(
@@ -64,10 +99,15 @@ const getDeploysResult = async (deployHash) => {
 	return deploys;
 };
 
+/**
+ * Get deploy result status.
+ * @param {Array} deployHash - List of deploy hash.
+ * @return {Array} List of deploy hash with status.
+ */
 const getDeploysStatus = async (deployHash) => {
-	const deploysResult = await getDeploysResult(deployHash);
-	return deploysResult.length
-		? deploysResult.map((result) => {
+	const deploysResults = await getDeploysResult(deployHash);
+	return deploysResults.length
+		? deploysResults.map((result) => {
 				const { execution_results, deploy } = result;
 				return {
 					hash: deploy.hash,
@@ -81,6 +121,13 @@ const getDeploysStatus = async (deployHash) => {
 		: [];
 };
 
+/**
+ * Get on-chain state value by key.
+ * @param {String} deployHash - Deploy hash.
+ * @param {String} stateKey - State key.
+ * @param {Array} statePath - State path.
+ * @return {Object} State Value.
+ */
 const getStateValue = async (stateRootHash, stateKey, statePath) => {
 	return await casperClient.nodeClient.getBlockState(stateRootHash, stateKey, statePath);
 };
@@ -101,6 +148,11 @@ const getStateKeyValue = async (stateRootHash, stateKey, statePath) => {
 	return value;
 };
 
+/**
+ * Parse public key to CL value to query on-chain.
+ * @param {String} publicKey - Root hash of global state at a recent block.
+ * @return {CLKey} CL value.
+ */
 const createRecipientAddress = (publicKey) => {
 	const pbKey = CLPublicKey.fromHex(publicKey);
 	return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
@@ -145,6 +197,7 @@ const dictionaryValueGetter = async (stateRootHash, dictionaryItemKey, seedUref)
  * @return {Object} Dictionary value.
  */
 const getContractNamedKeyUref = async (stateRootHash, contractHash, namedKeys = []) => {
+	// contract hash must be formatted with hash- prefix before querying data
 	const formattedContractHash = `hash-${contractHash}`;
 	const stateValue = await getStateValue(stateRootHash, formattedContractHash, []);
 	const { Contract } = stateValue;
