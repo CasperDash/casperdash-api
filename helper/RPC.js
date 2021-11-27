@@ -21,7 +21,7 @@ const getRPCURL = async (ipIndex = 0) => {
 		return getRPCURL(ipIndex + 1);
 	}
 };
-getRPCURL();
+
 module.exports = {
 	getRPCURL,
 };
