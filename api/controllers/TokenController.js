@@ -13,7 +13,7 @@ module.exports = {
 			const tokensInfo = await tokenServices.getListTokenInfo(tokenAddress);
 			res.json(_.merge(balances, tokensInfo).filter((token) => token.name));
 		} catch (err) {
-			res.json(err);
+			res.status(500).json({ message: err.message });
 		}
 	},
 	getToken: async (req, res) => {
@@ -23,7 +23,7 @@ module.exports = {
 			const tokenInfo = await tokenServices.getTokenInfo(tokenAddress);
 			res.json(tokenInfo);
 		} catch (error) {
-			res.json(error);
+			res.status(500).json({ message: error.message });
 		}
 	},
 };

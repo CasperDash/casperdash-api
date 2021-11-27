@@ -9,7 +9,7 @@ module.exports = {
 			const keyManagerInfo = await userService.getAccount(publicKey);
 			res.json(keyManagerInfo);
 		} catch (error) {
-			res.status(401).json({ message: error.message });
+			res.status(500).json({ message: error.message });
 		}
 	},
 	getKeyManagerContractDeploy: async (req, res) => {

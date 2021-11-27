@@ -13,7 +13,7 @@ module.exports = {
 			const NFTInfo = await nftServices.getNFTInfo(addresses, publicKey);
 			res.json(NFTInfo);
 		} catch (err) {
-			res.json(err);
+			res.status(500).json({ message: err.message });
 		}
 	},
 };

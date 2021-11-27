@@ -7,8 +7,8 @@ module.exports = {
 			const userServices = new UserServices(req.RPC_URL);
 			const accountDetails = await userServices.getAccountDetails(publicKey);
 			res.json(accountDetails);
-		} catch {
-			res.json({});
+		} catch (error) {
+			res.status(500).json({ message: error.message });
 		}
 	},
 };
