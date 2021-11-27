@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
-		"start": "NODE_ENV=production PORT=3001 RPC_URL=http://161.97.155.213:7777/rpc  nodemon server.js",
-		"dev": "NODE_ENV=production PORT=3001 nodemon server.js",
-		"mainnet": "NODE_ENV=production PORT=3001 node server.js"
+		"start": "NODE_ENV=mainnet PORT=3001 nodemon server.js",
+		"dev": "NODE_ENV=testnet PORT=3001 nodemon server.js",
+		"mainnet": "NODE_ENV=mainnet PORT=3001 node server.js"
 	},
 	"author": "",
 	"license": "ISC",

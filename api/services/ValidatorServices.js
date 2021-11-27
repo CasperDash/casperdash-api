@@ -1,22 +1,26 @@
-const { casperServiceRPC, getCurrentEraId } = require('./CasperServices');
+const CasperServices = require('./CasperServices');
 
-/**
- * Retrive the era validators with bid information by eraId. If eraId not give, then get current eraId.
- * @param {Number} eraId
- * @returns
- */
-const getValidators = async (eraId) => {
-	try {
+class ValidatorServices {
+	constructor(RPC_URL) {
+		this.casperServices = new CasperServices(RPC_URL);
+	}
+
+	/**
+	 * Retrive the era validators with bid information by eraId. If eraId not give, then get current eraId.
+	 * @param {Number} eraId
+	 * @returns
+	 */
+	getValidators = async (eraId) => {
 		let validatorsWithBidInfo = [];
 		if (!eraId) {
-			const currentEraId = await getCurrentEraId();
+			const currentEraId = await this.casperServices.getCurrentEraId();
 			if (!currentEraId) {
 				return validatorsWithBidInfo;
 			}
 			eraId = currentEraId;
 		}
 
-		const { auction_state } = await casperServiceRPC.getValidatorsInfo(); // Reference schema: https://github.com/casper-network/casper-node/blob/release-1.4.1/resources/test/rpc_schema_hashing_V2.json#L4073
+		const { auction_state } = await this.casperServices.casperServiceRPC.getValidatorsInfo(); // Reference schema: https://github.com/casper-network/casper-node/blob/release-1.4.1/resources/test/rpc_schema_hashing_V2.json#L4073
 		if (!auction_state) {
 			return validatorsWithBidInfo;
 		}
@@ -32,24 +36,20 @@ const getValidators = async (eraId) => {
 			return validatorsWithBidInfo;
 		}
 
-		validatorsWithBidInfo = massageValidators(validatorWeights, bids);
+		validatorsWithBidInfo = this.massageValidators(validatorWeights, bids);
 		return validatorsWithBidInfo;
-	} catch (error) {
-		throw error;
-	}
-};
+	};
 
-const massageValidators = (validatorWeights, bids) => {
-	return validatorWeights.map((validator) => addBidInfoToValidator(validator, bids));
-};
+	massageValidators = (validatorWeights, bids) => {
+		return validatorWeights.map((validator) => this.addBidInfoToValidator(validator, bids));
+	};
 
-const addBidInfoToValidator = (validator, bids) => {
-	const { public_key: validatorPublicKey } = validator;
-	const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
-	validator.bidInfo = bid;
-	return validator;
-};
+	addBidInfoToValidator = (validator, bids) => {
+		const { public_key: validatorPublicKey } = validator;
+		const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
+		validator.bidInfo = bid;
+		return validator;
+	};
+}
 
-module.exports = {
-	getValidators,
-};
+module.exports = ValidatorServices;

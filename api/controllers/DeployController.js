@@ -1,15 +1,21 @@
-const { putDeploy, getDeploysStatus, getLatestBlockHash } = require('../services/CasperServices');
+const CasperServices = require('../services/CasperServices');
 
 module.exports = {
 	deploy: async (req, res) => {
-		const body = req.body;
-		const hash = await putDeploy(body);
-		res.json({ deployHash: hash });
+		try {
+			const body = req.body;
+			const casperServices = new CasperServices(req.RPC_URL);
+			const hash = await casperServices.putDeploy(body);
+			res.json({ deployHash: hash });
+		} catch (error) {
+			res.status(500).json({ message: error.message });
+		}
 	},
 	getDeploysStatus: async (req, res) => {
 		try {
 			const query = req.query;
-			const deploys = await getDeploysStatus(query.deployHash);
+			const casperServices = new CasperServices(req.RPC_URL);
+			const deploys = await casperServices.getDeploysStatus(query.deployHash);
 			res.json(deploys);
 		} catch (error) {
 			res.status(500).json({ message: error.message });
@@ -17,7 +23,8 @@ module.exports = {
 	},
 	getLatestBlockHash: async (req, res) => {
 		try {
-			const latestBlockHash = await getLatestBlockHash();
+			const casperServices = new CasperServices(req.RPC_URL);
+			const latestBlockHash = await casperServices.getLatestBlockHash();
 			res.json({ latestBlockHash });
 		} catch (error) {
 			res.status(500).json({ message: error.message });

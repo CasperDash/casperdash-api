@@ -1,10 +1,11 @@
-const { getValidators } = require('../services/ValidatorServices');
+const ValidatorServices = require('../services/ValidatorServices');
 
 module.exports = {
 	getValidators: async (req, res, next) => {
 		try {
 			const { eraId } = req.params;
-			const validators = await getValidators(eraId);
+			const validatorServices = new ValidatorServices(req.RPC_URL);
+			const validators = await validatorServices.getValidators(eraId);
 			res.json(validators);
 		} catch (err) {
 			next(err);

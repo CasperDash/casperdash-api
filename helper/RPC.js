@@ -1,16 +1,22 @@
 const axios = require('axios');
-const { MAIN_NET_RPC_URLS } = require('../config/RPCConfig');
+const { RPC_URLS } = require('../config/RPCConfig');
 
 const buildURL = (ip) => `http://${ip}:7777/rpc`;
 
-const getRPCURL = async (ipIndex = 0) => {
+const randomURLIndex = (rpcList) => Math.floor(Math.random() * rpcList.length);
+
+const getRPCURL = async (rpcURLList = RPC_URLS) => {
+	// random a rpc url at first time
+
+	const rpcURLIndex = randomURLIndex(rpcURLList);
+
+	const ip = rpcURLList[rpcURLIndex] && rpcURLList[rpcURLIndex].ip;
+	// Throw exception can't reach nodes
+	if (!ip) {
+		throw 'Can not reach all default nodes!';
+	}
 	let url;
 	try {
-		const ip = MAIN_NET_RPC_URLS[ipIndex] && MAIN_NET_RPC_URLS[ipIndex].ip;
-		if (!ip) {
-			console.info(`Can not reach all default node! return ${buildURL(MAIN_NET_RPC_URLS[0].ip)}`);
-			return MAIN_NET_RPC_URLS[0].ip;
-		}
 		url = buildURL(ip);
 		console.info(`Ping ${url}`);
 		await axios.get(url, { timeout: 2000 });
@@ -18,7 +24,11 @@ const getRPCURL = async (ipIndex = 0) => {
 		return url;
 	} catch (error) {
 		console.info(`Can not reach ${url}. Request was aborted! Go next!`);
-		return getRPCURL(ipIndex + 1);
+		return getRPCURL(
+			rpcURLList.filter((rpc, i) => {
+				return rpcURLIndex !== i;
+			}),
+		);
 	}
 };
 
