@@ -8,22 +8,12 @@ const {
 	CasperClient,
 } = require('casper-js-sdk');
 
-// const casperServiceRPC = new CasperServiceByJsonRPC('http://65.21.237.153:7777/rpc');
-// const casperClient = new CasperClient('http://65.21.237.153:7777/rpc');
-
 class CasperServices {
 	constructor(RPC_URL) {
 		this.url = RPC_URL;
 		this.casperServiceRPC = new CasperServiceByJsonRPC(RPC_URL);
 		this.casperClient = new CasperClient(RPC_URL);
 	}
-	// /**
-	//  * Get casper service RPC
-	//  */
-	//  getCasperServiceRPC = async () => {
-	// 	const rpcURL = await getRPCURL();
-	// 	return new CasperServiceByJsonRPC(rpcURL);
-	// };
 
 	/**
 	 * Returns root hash of global state at a recent block.
