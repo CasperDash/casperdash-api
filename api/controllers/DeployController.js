@@ -12,7 +12,6 @@ module.exports = {
 			const deploys = await getDeploysStatus(query.deployHash);
 			res.json(deploys);
 		} catch (error) {
-			console.log('error');
 			res.status(500).json({ message: error.message });
 		}
 	},

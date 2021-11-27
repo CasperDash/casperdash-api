@@ -48,7 +48,7 @@ const getListTokenInfo = async (tokenAddressList, stateRootHash) => {
 				}),
 		);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
 
