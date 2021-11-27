@@ -46,7 +46,7 @@ const massageValidators = (validatorWeights, bids) => {
 const addBidInfoToValidator = (validator, bids) => {
 	const { public_key: validatorPublicKey } = validator;
 	const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
-	validator.bid = bid;
+	validator.bidInfo = bid;
 	return validator;
 };
 
