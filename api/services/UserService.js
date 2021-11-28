@@ -6,6 +6,11 @@ class UserServices {
 		this.casperServices = new CasperServices(RPC_URL);
 	}
 
+	/**
+	 * Get account balance by uref
+	 * @param {string} uref
+	 * @param {string} stateRootHash
+	 */
 	getAccountBalanceByUref = async (uref, stateRootHash) => {
 		try {
 			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
@@ -23,16 +28,27 @@ class UserServices {
 	 * @returns {Object} account state
 	 */
 	getAccount = async (publicKey, stateRootHash) => {
-		const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
-		const publicKeyCL = CLPublicKey.fromHex(publicKey);
+		try {
+			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
+			const publicKeyCL = CLPublicKey.fromHex(publicKey);
 
-		const account = await this.casperServices.casperServiceRPC
-			.getBlockState(rootHash, publicKeyCL.toAccountHashStr(), [])
-			.then((res) => res.Account);
+			const blockState = await this.casperServices.casperServiceRPC.getBlockState(
+				rootHash,
+				publicKeyCL.toAccountHashStr(),
+				[],
+			);
 
-		return account;
+			return blockState.Account;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	};
 
+	/**
+	 * Get account details
+	 * @param {string} publicKey
+	 */
 	getAccountDetails = async (publicKey) => {
 		const account = await this.getAccount(publicKey);
 		const balance = await this.getAccountBalanceByUref(account && account.mainPurse);

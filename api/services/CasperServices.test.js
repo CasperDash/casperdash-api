@@ -1,4 +1,4 @@
-const { CasperServiceByJsonRPC, DeployUtil, CLValueParsers, CasperClient } = require('casper-js-sdk');
+const { CasperServiceByJsonRPC, DeployUtil, CLValueParsers, CasperClient, CLPublicKey } = require('casper-js-sdk');
 const CasperServices = require('./CasperServices');
 
 const casperServices = new CasperServices('test');
@@ -155,15 +155,21 @@ describe('getStateKeyValue', () => {
 
 describe('createRecipientAddress', () => {
 	test('Should log error', () => {
-		casperServices.createRecipientAddress('test');
-		expect(console.error).toHaveBeenCalled();
+		try {
+			casperServices.createRecipientAddress('test');
+		} catch {
+			expect(console.error).toHaveBeenCalled();
+		}
 	});
 
 	test('Should return CLKey', () => {
+		const spyOnFromHex = jest.spyOn(CLPublicKey, 'fromHex');
+		spyOnFromHex.mockReturnValue({ toAccountHash: () => 'test' });
 		const CLKeyValue = casperServices.createRecipientAddress(
 			'0160d88b3f847221f4dc6c5549dcfc26772c02f253a24de226a88b4536bc61d4ad',
 		);
-		expect(CLKeyValue).toEqual(undefined);
+		expect(spyOnFromHex).toHaveBeenCalled();
+		expect(typeof CLKeyValue).toEqual('object');
 	});
 });
 
