@@ -156,8 +156,13 @@ class CasperServices {
 	 * @return {CLKey} CL value.
 	 */
 	createRecipientAddress = (publicKey) => {
-		const pbKey = CLPublicKey.fromHex(publicKey);
-		return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
+		try {
+			const pbKey = CLPublicKey.fromHex(publicKey);
+			return new CLKey(new CLAccountHash(pbKey.toAccountHash()));
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	};
 
 	/**
