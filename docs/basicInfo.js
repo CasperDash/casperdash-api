@@ -11,7 +11,7 @@ module.exports = {
 		},
 		license: {
 			name: 'MIT',
-			url: 'https://opensource.org/licenses/MIT',
+			url: 'https://raw.githubusercontent.com/CasperDash/casperdash-client/develop/LICENSE',
 		},
 	},
 };
