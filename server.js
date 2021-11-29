@@ -20,7 +20,7 @@ app.use(allowCrossDomain);
 app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(casperNodeMiddleware);
+app.use(/^(\/api-docs+|(?!\/api-docs).*)$/, casperNodeMiddleware);
 
 routes(app);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));
