@@ -1,10 +1,22 @@
 const axios = require('axios');
 const { RPC_URLS } = require('../config/RPCConfig');
 
+/**
+ * Build RPC URL
+ * @param {string} ip
+ */
 const buildURL = (ip) => `http://${ip}:7777/rpc`;
 
+/**
+ * Random a RPC index
+ * @param {array} rpcList
+ */
 const randomURLIndex = (rpcList) => Math.floor(Math.random() * rpcList.length);
 
+/**
+ * Get active RPC URL
+ * @param {array} rpcURLList
+ */
 const getRPCURL = async (rpcURLList = RPC_URLS) => {
 	// random a rpc url
 	const rpcURLIndex = randomURLIndex(rpcURLList);

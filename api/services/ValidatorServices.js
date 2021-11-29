@@ -40,10 +40,20 @@ class ValidatorServices {
 		return validatorsWithBidInfo;
 	};
 
+	/**
+	 * Massage validators info
+	 * @param {number} validatorWeights
+	 * @param {array} bids
+	 */
 	massageValidators = (validatorWeights, bids) => {
 		return validatorWeights.map((validator) => this.addBidInfoToValidator(validator, bids));
 	};
 
+	/**
+	 * Add bid info to validator
+	 * @param {object} validator
+	 * @param {array} bids
+	 */
 	addBidInfoToValidator = (validator, bids) => {
 		const { public_key: validatorPublicKey } = validator;
 		const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
