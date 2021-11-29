@@ -28,7 +28,7 @@ class NFTServices {
 	};
 
 	/**
-	 * Get nft balance
+	 * Get Token Ids By PublicKey
 	 * @param {String} stateRootHash - Root hash of global state at a recent block.
 	 * @param {String} publicKey - public key.
 	 * @param {String} balanceUref - NFT balance Uref.
@@ -109,7 +109,7 @@ class NFTServices {
 	};
 
 	/**
-	 * Get information for each tokens
+	 * Get information for each NFT
 	 * @param {Array} tokenAddressList - List of NFT contract address.
 	 * @param {String} publicKey - Public key.
 	 * @return {Array} NTFs information by public key.
@@ -149,6 +149,7 @@ class NFTServices {
 						...(await this.getNFTInfoByTokenId(stateRootHash, namedKeys, tokenIds, namedKeysUref)),
 					};
 				} catch (error) {
+					console.error(error);
 					return null;
 				}
 			}),

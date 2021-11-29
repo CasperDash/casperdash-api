@@ -5,7 +5,7 @@ const casperNodeMiddleware = async (req, res, next) => {
 		req.RPC_URL = await getRPCURL();
 		next();
 	} catch (error) {
-		res.error('Can not reach node!');
+		res.status(500).json({ message: error });
 	}
 };
 
