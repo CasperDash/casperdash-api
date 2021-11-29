@@ -8,7 +8,6 @@ const randomURLIndex = (rpcList) => Math.floor(Math.random() * rpcList.length);
 const getRPCURL = async (rpcURLList = RPC_URLS) => {
 	// random a rpc url
 	const rpcURLIndex = randomURLIndex(rpcURLList);
-
 	const ip = rpcURLList[rpcURLIndex] && rpcURLList[rpcURLIndex].ip;
 	// Throw exception can't reach nodes
 	if (!ip) {
@@ -33,4 +32,5 @@ const getRPCURL = async (rpcURLList = RPC_URLS) => {
 
 module.exports = {
 	getRPCURL,
+	randomURLIndex,
 };
