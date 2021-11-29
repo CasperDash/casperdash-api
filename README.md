@@ -19,3 +19,7 @@ npm run dev   //testnet
 Check document at http://localhost:3001/api-docs after running
 
 ![](https://i.imgur.com/kaDjQfF.png)
+
+### License
+
+[MIT](https://raw.githubusercontent.com/CasperDash/casperdash-client/develop/LICENSE)
