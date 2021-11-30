@@ -1,7 +1,7 @@
 {
-	"name": "api_nodejs",
+	"name": "casperdash_api",
 	"version": "1.0.0",
-	"description": "",
+	"description": "CasperDash APIs",
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
@@ -9,8 +9,8 @@
 		"dev": "NODE_ENV=testnet PORT=3001 nodemon server.js",
 		"mainnet": "NODE_ENV=mainnet PORT=3001 node server.js"
 	},
-	"author": "",
-	"license": "ISC",
+	"author": "CasperDash",
+	"license": "MIT",
 	"devDependencies": {
 		"babel-eslint": "^10.1.0",
 		"eslint": "^7.32.0",
@@ -21,7 +21,8 @@
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-promise": "^5.1.1",
 		"jest": "^27.3.1",
-		"nodemon": "^2.0.12"
+		"nodemon": "^2.0.12",
+		"swagger-ui-express": "^4.1.6"
 	},
 	"dependencies": {
 		"axios": "^0.24.0",

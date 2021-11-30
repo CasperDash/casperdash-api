@@ -23,7 +23,7 @@ module.exports = function (app) {
 	app.route('/tokens/getTokensInfo').get(tokenController.getTokens);
 	app.route('/token/:tokenAddress').get(tokenController.getToken);
 	// Validator
-	app.route('/validators/:eraId?').get(stakeController.getValidators);
+	app.route('/validators').get(stakeController.getValidators);
 	// NFT
 	app.route('/nfts/getNFTsInfo').get(NFTController.getNFTs);
 };

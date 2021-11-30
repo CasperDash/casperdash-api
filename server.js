@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const swaggerUI = require('swagger-ui-express');
 const { casperNodeMiddleware } = require('./middleware/nodeMiddleware');
+let routes = require('./api/routes'); //importing route
+const docs = require('./docs');
 
 const app = express();
 const port = process.env.PORT;
@@ -17,11 +20,10 @@ app.use(allowCrossDomain);
 app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(casperNodeMiddleware);
+app.use(/^(\/api-docs+|(?!\/api-docs).*)$/, casperNodeMiddleware);
 
-let routes = require('./api/routes'); //importing route
 routes(app);
-
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));
 app.use(function (req, res) {
 	res.status(404).send({ url: req.originalUrl + ' not found' });
 });
