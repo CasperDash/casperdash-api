@@ -47,6 +47,7 @@ class TokenServices {
 			);
 		} catch (err) {
 			console.error(err);
+			return [];
 		}
 	};
 

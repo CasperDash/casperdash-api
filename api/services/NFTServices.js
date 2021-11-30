@@ -6,6 +6,7 @@ const CasperServices = require('../services/CasperServices');
 
 const OWNED_TOKENS_BY_INDEX_NAMED_KEY = 'owned_tokens_by_index';
 const BALANCES_NAMED_KEY = 'balances';
+const METADATA_NAMED_KEY = 'metadata';
 
 class NFTServices {
 	constructor(RPC_URL) {
@@ -20,11 +21,16 @@ class NFTServices {
 	 * @return {int} balance.
 	 */
 	getBalanceByPublicKey = async (stateRootHash, publicKey, balanceUref) => {
-		const pbKey = CLPublicKey.fromHex(publicKey);
-		const accountHash = Buffer.from(pbKey.toAccountHash()).toString('hex');
-		const result = await this.casperServices.dictionaryValueGetter(stateRootHash, accountHash, balanceUref);
-		const value = parseInt(result.unwrap().value(), 0);
-		return isNaN(value) ? 0 : value;
+		try {
+			const pbKey = CLPublicKey.fromHex(publicKey);
+			const accountHash = Buffer.from(pbKey.toAccountHash()).toString('hex');
+			const result = await this.casperServices.dictionaryValueGetter(stateRootHash, accountHash, balanceUref);
+			const value = parseInt(result.unwrap().value(), 0);
+			return isNaN(value) ? 0 : value;
+		} catch (error) {
+			console.error(error);
+			return 0;
+		}
 	};
 
 	/**
@@ -36,25 +42,30 @@ class NFTServices {
 	 * @return {Array} token Ids.
 	 */
 	getTokenIdsByPublicKey = async (stateRootHash, publicKey, balanceUref, ownedTokensByIndexUref) => {
-		const accountKey = this.casperServices.createRecipientAddress(publicKey);
-		const accountBytes = CLValueParsers.toBytes(accountKey).unwrap();
-		const balanceOri = await this.getBalanceByPublicKey(stateRootHash, publicKey, balanceUref);
-		const balance = parseInt(balanceOri, 0);
-		return await Promise.all(
-			new Array(balance).fill().map(async (value, i) => {
-				const numBytes = CLValueParsers.toBytes(CLValueBuilder.u256(i)).unwrap();
-				const concated = concat([accountBytes, numBytes]);
-				const blaked = blake.blake2b(concated, undefined, 32);
-				const str = Buffer.from(blaked).toString('hex');
-				const result = await this.casperServices.dictionaryValueGetter(
-					stateRootHash,
-					str,
-					ownedTokensByIndexUref,
-				);
-				const maybeValue = result.unwrap();
-				return maybeValue.value();
-			}),
-		);
+		try {
+			const accountKey = this.casperServices.createRecipientAddress(publicKey);
+			const accountBytes = CLValueParsers.toBytes(accountKey).unwrap();
+			const balanceOri = await this.getBalanceByPublicKey(stateRootHash, publicKey, balanceUref);
+			const balance = parseInt(balanceOri, 0);
+			return await Promise.all(
+				new Array(balance).fill().map(async (value, i) => {
+					const numBytes = CLValueParsers.toBytes(CLValueBuilder.u256(i)).unwrap();
+					const concated = concat([accountBytes, numBytes]);
+					const blaked = blake.blake2b(concated, undefined, 32);
+					const str = Buffer.from(blaked).toString('hex');
+					const result = await this.casperServices.dictionaryValueGetter(
+						stateRootHash,
+						str,
+						ownedTokensByIndexUref,
+					);
+					const maybeValue = result.unwrap();
+					return maybeValue.value();
+				}),
+			);
+		} catch (error) {
+			console.error(error);
+			return [];
+		}
 	};
 
 	/**
@@ -118,11 +129,14 @@ class NFTServices {
 		const stateRootHash = await this.casperServices.getStateRootHash();
 		const NFTInfo = await Promise.all(
 			tokenAddressList.map(async (tokenAddress) => {
-				const { name, symbol, namedKeys } = NFT_CONFIG[tokenAddress] || {};
-				if (!namedKeys) {
-					return null;
-				}
-				const tokenNamedKeys = [OWNED_TOKENS_BY_INDEX_NAMED_KEY, BALANCES_NAMED_KEY, ...Object.keys(namedKeys)];
+				const { name, symbol, namedKeys = {} } = NFT_CONFIG[tokenAddress] || {};
+
+				const tokenNamedKeys = [
+					OWNED_TOKENS_BY_INDEX_NAMED_KEY,
+					BALANCES_NAMED_KEY,
+					METADATA_NAMED_KEY,
+					...Object.keys(namedKeys),
+				];
 				try {
 					const namedKeysUref = await this.casperServices.getContractNamedKeyUref(
 						stateRootHash,

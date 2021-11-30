@@ -55,3 +55,16 @@ describe('getAccount', () => {
 		expect(value).toEqual({ hash: 'test' });
 	});
 });
+
+describe('getAccountDetails', () => {
+	test('Should return user details', async () => {
+		const spyOnGetAccount = jest.spyOn(userServices, 'getAccount');
+		spyOnGetAccount.mockReturnValue({ publicKey: 'getAccount' });
+		const spyOnGetAccountBalanceByUref = jest.spyOn(userServices, 'getAccountBalanceByUref');
+		spyOnGetAccountBalanceByUref.mockReturnValue(10);
+		const accountDetails = await userServices.getAccountDetails('testkey');
+		expect(spyOnGetAccount).toHaveBeenCalled();
+		expect(spyOnGetAccountBalanceByUref).toHaveBeenCalled();
+		expect(accountDetails).toEqual({ publicKey: 'getAccount', balance: 10 });
+	});
+});
