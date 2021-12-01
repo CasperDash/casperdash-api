@@ -55,22 +55,40 @@ describe('getTokenInfo', () => {
 describe('getListTokenInfo', () => {
 	test('Should call return list token info', async () => {
 		mockGetStateKeyValue.mockReturnValue('');
-		const value = await tokenServices.getListTokenInfo('testaddress');
+		const value = await tokenServices.getListTokenInfo(['testaddress']);
 
-		expect(value).toEqual([{ address: 'testaddress', decimals: '', name: '', symbol: '', total_supply: '' }]);
+		expect(value).toEqual([
+			{
+				address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8',
+				decimals: '',
+				name: '',
+				symbol: '',
+				total_supply: '',
+			},
+			{ address: 'testaddress', decimals: '', name: '', symbol: '', total_supply: '' },
+		]);
 	});
 	test('Should call accept array as param', async () => {
 		mockGetStateKeyValue.mockReturnValue('');
 		const value = await tokenServices.getListTokenInfo(['testaddress']);
 
-		expect(value).toEqual([{ address: 'testaddress', decimals: '', name: '', symbol: '', total_supply: '' }]);
+		expect(value).toEqual([
+			{
+				address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8',
+				decimals: '',
+				name: '',
+				symbol: '',
+				total_supply: '',
+			},
+			{ address: 'testaddress', decimals: '', name: '', symbol: '', total_supply: '' },
+		]);
 	});
 
 	test('Should return empty array  and log error if exception', async () => {
 		mockGetStateRootHash.mockImplementation(() => {
 			throw 'error';
 		});
-		const value = await tokenServices.getListTokenInfo('testaddress');
+		const value = await tokenServices.getListTokenInfo(['testaddress']);
 
 		expect(value).toEqual([]);
 	});
@@ -81,12 +99,15 @@ describe('getTokensBalanceByPublicKey', () => {
 		mockGetStateRootHash.mockReturnValue('');
 		mockGetContractNamedKeyUref.mockReturnValue([{}]);
 		mockDictionaryValueGetter.mockReturnValue(100);
-		const value = await tokenServices.getTokensBalanceByPublicKey('testaddress');
+		const value = await tokenServices.getTokensBalanceByPublicKey(['testaddress']);
 		expect(mockGetStateRootHash).toHaveBeenCalled();
 		expect(mockGetContractNamedKeyUref).toHaveBeenCalled();
 		expect(mockGetAccountHashBase64).toHaveBeenCalled();
 		expect(mockDictionaryValueGetter).toHaveBeenCalled();
-		expect(value).toEqual([{ balance: 100, address: 'testaddress' }]);
+		expect(value).toEqual([
+			{ balance: 100, address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8' },
+			{ balance: 100, address: 'testaddress' },
+		]);
 	});
 	test('Should return balance equal 0 if can not get balance uref', async () => {
 		mockGetStateRootHash.mockReturnValue('');
@@ -94,7 +115,10 @@ describe('getTokensBalanceByPublicKey', () => {
 		const value = await tokenServices.getTokensBalanceByPublicKey(['testaddress']);
 		expect(mockGetStateRootHash).toHaveBeenCalled();
 		expect(mockGetContractNamedKeyUref).toHaveBeenCalled();
-		expect(value).toEqual([{ balance: 0, address: 'testaddress' }]);
+		expect(value).toEqual([
+			{ balance: 0, address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8' },
+			{ balance: 0, address: 'testaddress' },
+		]);
 	});
 
 	test('Should return balance equal 0 if has exception during get balance for each token address', async () => {
@@ -104,6 +128,7 @@ describe('getTokensBalanceByPublicKey', () => {
 		expect(mockGetStateRootHash).toHaveBeenCalled();
 		expect(mockGetContractNamedKeyUref).toHaveBeenCalled();
 		expect(value).toEqual([
+			{ balance: 0, address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8' },
 			{ balance: 0, address: 'testaddress' },
 			{ balance: 0, address: 'testaddress1' },
 		]);
@@ -115,6 +140,8 @@ describe('getTokensBalanceByPublicKey', () => {
 		});
 		const value = await tokenServices.getTokensBalanceByPublicKey('testaddress');
 
-		expect(value).toEqual([{ balance: 0, address: 'testaddress' }]);
+		expect(value).toEqual([
+			{ balance: 0, address: '43f01f0a9798e64837e7244eafd7b1e6462ebd2023336feb9505ae59c4af3bf8' },
+		]);
 	});
 });

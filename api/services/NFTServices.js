@@ -1,7 +1,7 @@
 const { CLValueParsers, CLPublicKey, CLValueBuilder } = require('casper-js-sdk');
 const blake = require('blakejs');
 const { concat } = require('@ethersproject/bytes');
-const { NFT_CONFIG } = require('../../config/NFTConfig');
+const { NFT_CONFIG } = require('../../config');
 const CasperServices = require('../services/CasperServices');
 
 const OWNED_TOKENS_BY_INDEX_NAMED_KEY = 'owned_tokens_by_index';
@@ -126,9 +126,10 @@ class NFTServices {
 	 * @return {Array} NTFs information by public key.
 	 */
 	getNFTInfo = async (tokenAddressList = [], publicKey) => {
+		const addresses = [...new Set([...tokenAddressList, ...Object.keys(NFT_CONFIG)])];
 		const stateRootHash = await this.casperServices.getStateRootHash();
 		const NFTInfo = await Promise.all(
-			tokenAddressList.map(async (tokenAddress) => {
+			addresses.map(async (tokenAddress) => {
 				const { name, symbol, namedKeys = {} } = NFT_CONFIG[tokenAddress] || {};
 
 				const tokenNamedKeys = [

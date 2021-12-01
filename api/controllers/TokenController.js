@@ -5,7 +5,7 @@ module.exports = {
 	getTokens: async (req, res) => {
 		try {
 			const { tokenAddress, publicKey } = req.query;
-			if (!tokenAddress) {
+			if (!Array.isArray(tokenAddress)) {
 				res.json([]);
 			}
 			const tokenServices = new TokenServices(req.RPC_URL);

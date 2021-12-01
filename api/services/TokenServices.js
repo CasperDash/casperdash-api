@@ -1,10 +1,19 @@
 const { ERC20_TOKEN_ATTRS } = require('../../constants');
+const { TOKEN_CONFIG } = require('../../config');
 const CasperServices = require('./CasperServices');
 
 class TokenServices {
 	constructor(RPC_URL) {
 		this.casperServices = new CasperServices(RPC_URL);
 	}
+
+	/**
+	 * Get all token addresses which will be queried data
+	 * @param {array} tokenAddress
+	 */
+	getAllTokenAddress = (tokenAddress) => {
+		return [...new Set([...Object.keys(TOKEN_CONFIG), ...(Array.isArray(tokenAddress) ? tokenAddress : [])])];
+	};
 
 	/**
 	 * Get token info by contract address hash
@@ -36,7 +45,7 @@ class TokenServices {
 	 */
 	getListTokenInfo = async (tokenAddressList, stateRootHash) => {
 		try {
-			const addresses = Array.isArray(tokenAddressList) ? tokenAddressList : [tokenAddressList];
+			const addresses = this.getAllTokenAddress(tokenAddressList);
 			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
 			return await Promise.all(
 				addresses
@@ -58,7 +67,8 @@ class TokenServices {
 	 * @returns {Object} token balance
 	 */
 	getTokensBalanceByPublicKey = async (tokenAddressList, publicKey) => {
-		const addresses = Array.isArray(tokenAddressList) ? tokenAddressList : [tokenAddressList];
+		const addresses = this.getAllTokenAddress(tokenAddressList);
+
 		try {
 			const stateRootHash = await this.casperServices.getStateRootHash();
 

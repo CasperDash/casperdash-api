@@ -36,7 +36,7 @@ describe('getNFTs', () => {
 	test('Should return error', async () => {
 		const mockRequest = {
 			query: {
-				tokenAddress: 'test',
+				tokenAddress: ['test'],
 				publicKey: 'publickey',
 			},
 		};
