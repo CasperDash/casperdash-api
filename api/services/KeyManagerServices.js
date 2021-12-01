@@ -7,11 +7,18 @@ class KeyManagerServices {
 		this.casperServices = new CasperServices(RPC_URL);
 	}
 
+	/**
+	 * Get Key Manager Deploy
+	 */
 	getKeyManagerDeploy = async () => {
 		const session = await this.casperServices.getDeployJson(KEY_MANAGER_CONTRACT_DEPLOY_HASH);
 		return session;
 	};
 
+	/**
+	 * Deploy Key Manager Contract
+	 * @param {object} signedDeploy
+	 */
 	deployKeyManagerContract = async (signedDeploy) => {
 		const keyManagerDeploy = await this.getKeyManagerDeploy();
 		const deployJson = { deploy: { ...signedDeploy.deploy, session: keyManagerDeploy.deploy.session } };
