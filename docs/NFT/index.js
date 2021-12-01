@@ -16,7 +16,6 @@ module.exports = {
 							type: 'string',
 						},
 					},
-					required: true,
 				},
 				{
 					name: 'publicKey',

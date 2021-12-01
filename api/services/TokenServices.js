@@ -66,7 +66,7 @@ class TokenServices {
 	 * @param {String} publicKey public key
 	 * @returns {Object} token balance
 	 */
-	getTokensBalanceByPublicKey = async (tokenAddressList, publicKey) => {
+	getTokensBalanceByPublicKey = async (tokenAddressList = [], publicKey) => {
 		const addresses = this.getAllTokenAddress(tokenAddressList);
 
 		try {

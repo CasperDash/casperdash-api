@@ -5,9 +5,6 @@ module.exports = {
 	getTokens: async (req, res) => {
 		try {
 			const { tokenAddress, publicKey } = req.query;
-			if (!Array.isArray(tokenAddress)) {
-				res.json([]);
-			}
 			const tokenServices = new TokenServices(req.RPC_URL);
 			const balances = await tokenServices.getTokensBalanceByPublicKey(tokenAddress, publicKey);
 			const tokensInfo = await tokenServices.getListTokenInfo(tokenAddress);
