@@ -52,7 +52,6 @@ describe('getNFTs', () => {
 		const mockRequest = {
 			query: {
 				tokenAddress: undefined,
-				publicKey: 'publickey',
 			},
 		};
 		await NFTController.getNFTs(mockRequest, mockResponse);

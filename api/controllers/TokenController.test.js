@@ -42,15 +42,7 @@ describe('getTokens', () => {
 			{ address: 'publickey1', balance: 100, name: 'CasperDash', symbol: 'CDAS' },
 		]);
 	});
-	test('Should return empty  array if no address', async () => {
-		const mockRequest = {
-			query: {
-				publicKey: 'publickey',
-			},
-		};
-		await TokenController.getTokens(mockRequest, mockResponse);
-		expect(mockJson).toHaveBeenCalledWith([]);
-	});
+
 	test('Should return error', async () => {
 		const mockRequest = {
 			query: {

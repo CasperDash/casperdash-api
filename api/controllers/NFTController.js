@@ -4,7 +4,7 @@ module.exports = {
 	getNFTs: async (req, res) => {
 		try {
 			const { tokenAddress, publicKey } = req.query;
-			if (!Array.isArray(tokenAddress) || !publicKey) {
+			if (!publicKey) {
 				res.json([]);
 				return;
 			}
