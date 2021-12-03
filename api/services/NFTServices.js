@@ -88,8 +88,8 @@ class NFTServices {
 	 * @param {Array} namedKeysUref - List of named key uref.
 	 * @return {Array} list token with metadata information.
 	 */
-	getNFTInfoByTokenId = async (stateRootHash, infoNamedKeysConf, tokenIds, namedKeysUref) => {
-		const allTokenInfos = tokenIds.length
+	getNFTInfoByTokenId = async (stateRootHash, infoNamedKeysConf, tokenIds, namedKeysUref, contractInfo) => {
+		return tokenIds.length
 			? await Promise.all(
 					tokenIds.map(async (tokenId) => {
 						const tokenInfos = await Promise.all(
@@ -102,21 +102,26 @@ class NFTServices {
 								);
 								const values = namedKeyValue.unwrap().value();
 								return {
-									[namedKey]: values.map((value) =>
-										this.getAttributeConfig(
-											infoNamedKeysConf[namedKey].attributes,
-											value[0].data,
-											value[1].data,
+									[namedKey]:
+										Array.isArray(values) &&
+										values.map((value) =>
+											this.getAttributeConfig(
+												infoNamedKeysConf[namedKey].attributes,
+												value[0].data,
+												value[1].data,
+											),
 										),
-									),
 								};
 							}),
 						);
-						return { tokenId: tokenId, ...tokenInfos.reduce((out, info) => ({ ...out, ...info }), {}) };
+						return {
+							tokenId: tokenId,
+							...tokenInfos.reduce((out, info) => ({ ...out, ...info }), {}),
+							...contractInfo,
+						};
 					}),
 			  )
 			: [];
-		return allTokenInfos.reduce((out, info) => ({ ...out, ...info }), {});
 	};
 
 	/**
@@ -128,6 +133,7 @@ class NFTServices {
 	getNFTInfo = async (tokenAddressList = [], publicKey) => {
 		const addresses = [...new Set([...tokenAddressList, ...Object.keys(NFT_CONFIG)])];
 		const stateRootHash = await this.casperServices.getStateRootHash();
+
 		const NFTInfo = await Promise.all(
 			addresses.map(async (tokenAddress) => {
 				const { name, symbol, namedKeys = {} } = NFT_CONFIG[tokenAddress] || {};
@@ -156,20 +162,23 @@ class NFTServices {
 						balanceUref,
 						ownedTokensByIndexUref,
 					);
+					const contractInfo = { contractAddress: tokenAddress, name, symbol };
 
-					return {
-						contractAddress: tokenAddress,
-						name,
-						symbol,
-						...(await this.getNFTInfoByTokenId(stateRootHash, namedKeys, tokenIds, namedKeysUref)),
-					};
+					return await this.getNFTInfoByTokenId(
+						stateRootHash,
+						namedKeys,
+						tokenIds,
+						namedKeysUref,
+						contractInfo,
+					);
 				} catch (error) {
 					console.error(error);
 					return null;
 				}
 			}),
 		);
-		return NFTInfo.filter(Boolean);
+
+		return NFTInfo.flat().filter(Boolean);
 	};
 }
 
