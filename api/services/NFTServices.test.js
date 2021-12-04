@@ -108,12 +108,12 @@ describe('getNFTInfoByTokenId', () => {
 	test('Should return nft info', async () => {
 		const nftsInfo = await nftServices.getNFTInfoByTokenId('roothash', {}, ['test', 'test2'], ['uref1', 'uref2']);
 		expect(mockDictionaryValueGetter).toHaveBeenCalled();
-		expect(nftsInfo).toEqual({ tokenId: 'test2' });
+		expect(nftsInfo).toEqual([{ tokenId: 'test' }, { tokenId: 'test2' }]);
 	});
 	test('Should return empty object', async () => {
 		const nftsInfo = await nftServices.getNFTInfoByTokenId('roothash', {}, [], ['uref1', 'uref2']);
 		expect(mockDictionaryValueGetter).toHaveBeenCalled();
-		expect(nftsInfo).toEqual({});
+		expect(nftsInfo).toEqual([]);
 	});
 });
 
@@ -123,20 +123,51 @@ describe('getNFTInfo', () => {
 			{ name: 'balances', key: 'balanceuref' },
 			{ name: 'owned_tokens_by_index', key: 'owned_tokens_by_index_uref' },
 		]);
-		const nftsInfo = await nftServices.getNFTInfo(['token1', 'token2'], 'publickey');
+		const spyOnGetTokenIdsByPublicKey = jest.spyOn(nftServices, 'getTokenIdsByPublicKey');
+		spyOnGetTokenIdsByPublicKey.mockReturnValue(['token1', 'token2']);
+		const nftsInfo = await nftServices.getNFTInfo(['contract1', 'contract2'], 'publickey');
 		expect(mockGetStateRootHash).toHaveBeenCalled();
 		expect(mockGetContractNamedKeyUref).toHaveBeenCalled();
+		expect(spyOnGetTokenIdsByPublicKey).toHaveBeenCalled();
 
 		expect(nftsInfo).toEqual([
 			{
-				contractAddress: 'token1',
+				contractAddress: 'contract1',
 				name: undefined,
 				symbol: undefined,
+				tokenId: 'token1',
 			},
 			{
-				contractAddress: 'token2',
+				contractAddress: 'contract1',
 				name: undefined,
 				symbol: undefined,
+				tokenId: 'token2',
+			},
+			{
+				contractAddress: 'contract2',
+				name: undefined,
+				symbol: undefined,
+				tokenId: 'token1',
+			},
+			{
+				contractAddress: 'contract2',
+				name: undefined,
+				symbol: undefined,
+				tokenId: 'token2',
+			},
+			{
+				contractAddress: 'F4a75b1a0c1858bc4883165441107e0d23756E4ebdbD558918aD39231f1C7728',
+				metadata: false,
+				name: 'CasperDash',
+				symbol: 'CDAS',
+				tokenId: 'token1',
+			},
+			{
+				contractAddress: 'F4a75b1a0c1858bc4883165441107e0d23756E4ebdbD558918aD39231f1C7728',
+				metadata: false,
+				name: 'CasperDash',
+				symbol: 'CDAS',
+				tokenId: 'token2',
 			},
 		]);
 	});
