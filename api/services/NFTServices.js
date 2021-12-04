@@ -102,15 +102,15 @@ class NFTServices {
 								);
 								const values = namedKeyValue.unwrap().value();
 								return {
-									[namedKey]:
-										Array.isArray(values) &&
-										values.map((value) =>
-											this.getAttributeConfig(
-												infoNamedKeysConf[namedKey].attributes,
-												value[0].data,
-												value[1].data,
-											),
-										),
+									[namedKey]: Array.isArray(values)
+										? values.map((value) =>
+												this.getAttributeConfig(
+													infoNamedKeysConf[namedKey].attributes,
+													value[0].data,
+													value[1].data,
+												),
+										  )
+										: [],
 								};
 							}),
 						);
