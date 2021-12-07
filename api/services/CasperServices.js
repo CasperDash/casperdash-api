@@ -117,13 +117,12 @@ class CasperServices {
 					const { execution_results, deploy } = result;
 					return {
 						hash: deploy.hash,
-						status: !execution_results
-							? 'fail'
-							: !execution_results.length
-							? 'pending'
-							: execution_results.some((rs) => rs.result.Failure)
-							? 'fail'
-							: 'success',
+						status:
+							!execution_results || !execution_results.length
+								? 'pending'
+								: execution_results.some((rs) => rs.result.Failure)
+								? 'fail'
+								: 'success',
 					};
 			  })
 			: [];
