@@ -93,8 +93,12 @@ class CasperServices {
 		const hashes = Array.isArray(deployHash) ? deployHash : [deployHash];
 		const deploys = await Promise.all(
 			hashes.map(async (hash) => {
-				const deployJson = await this.getDeployResultJson(hash);
-				return deployJson;
+				try {
+					const deployJson = await this.getDeployResultJson(hash);
+					return deployJson;
+				} catch (error) {
+					return { deploy: { hash } };
+				}
 			}),
 		);
 
@@ -113,7 +117,9 @@ class CasperServices {
 					const { execution_results, deploy } = result;
 					return {
 						hash: deploy.hash,
-						status: !execution_results.length
+						status: !execution_results
+							? 'fail'
+							: !execution_results.length
 							? 'pending'
 							: execution_results.some((rs) => rs.result.Failure)
 							? 'fail'

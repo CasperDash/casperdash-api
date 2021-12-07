@@ -118,6 +118,14 @@ describe('getDeploysResult', () => {
 		expect(spyOn).toHaveBeenCalled();
 		expect(value).toEqual(['returnValue']);
 	});
+	test('Should return deploy obj with hash if have exception', async () => {
+		const spyOn = jest.spyOn(casperServices, 'getDeployResultJson');
+		spyOn.mockImplementation(() => {
+			throw 'error';
+		});
+		const value = await casperServices.getDeploysResult('test');
+		expect(value).toEqual([{ deploy: { hash: 'test' } }]);
+	});
 });
 
 describe('getDeploysStatus', () => {
@@ -127,6 +135,12 @@ describe('getDeploysStatus', () => {
 		const value = await casperServices.getDeploysStatus('testhash');
 		expect(spyOn).toHaveBeenCalled();
 		expect(value).toEqual([{ hash: 'testhash', status: 'pending' }]);
+	});
+	test('Should return deploy with fail status', async () => {
+		spyOn.mockReturnValue([{ deploy: { hash: 'testhash' } }]);
+		const value = await casperServices.getDeploysStatus('testhash');
+		expect(spyOn).toHaveBeenCalled();
+		expect(value).toEqual([{ hash: 'testhash', status: 'fail' }]);
 	});
 	test('Should return deploy with fail status', async () => {
 		spyOn.mockReturnValue([{ execution_results: [{ result: { Failure: {} } }], deploy: { hash: 'testhash' } }]);
