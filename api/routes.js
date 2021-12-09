@@ -4,6 +4,7 @@ module.exports = function (app) {
 	const keyManagerController = require('./controllers/KeyManagerController');
 	const deployController = require('./controllers/DeployController');
 	const tokenController = require('./controllers/TokenController');
+	const stakeController = require('./controllers/StakeController');
 	const NFTController = require('./controllers/NFTController');
 
 	// Configuration
@@ -21,6 +22,8 @@ module.exports = function (app) {
 	// Token
 	app.route('/tokens/getTokensInfo').get(tokenController.getTokens);
 	app.route('/token/:tokenAddress').get(tokenController.getToken);
+	// Validator
+	app.route('/validators').get(stakeController.getValidators);
 	// NFT
 	app.route('/nfts/getNFTsInfo').get(NFTController.getNFTs);
 };

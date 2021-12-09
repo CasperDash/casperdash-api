@@ -1,18 +1,19 @@
-const { getNFTInfo } = require('../services/NFTServices');
+const NFTServices = require('../services/NFTServices');
 
 module.exports = {
 	getNFTs: async (req, res) => {
 		try {
 			const { tokenAddress, publicKey } = req.query;
-			if (!tokenAddress || !publicKey) {
+			if (!publicKey) {
 				res.json([]);
 				return;
 			}
-			const addresses = Array.isArray(tokenAddress) ? tokenAddress : [tokenAddress];
-			const NFTInfo = await getNFTInfo(addresses, publicKey);
+			const nftServices = new NFTServices(req.RPC_URL);
+
+			const NFTInfo = await nftServices.getNFTInfo(tokenAddress, publicKey);
 			res.json(NFTInfo);
 		} catch (err) {
-			res.json(err);
+			res.status(500).json({ message: err.message });
 		}
 	},
 };

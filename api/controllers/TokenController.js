@@ -1,28 +1,26 @@
 const _ = require('lodash');
-const { getTokensBalanceByPublicKey, getListTokenInfo, getTokenInfo } = require('../services/TokenServices');
+const TokenServices = require('../services/TokenServices');
 
 module.exports = {
 	getTokens: async (req, res) => {
 		try {
 			const { tokenAddress, publicKey } = req.query;
-			if (!tokenAddress) {
-				res.json([]);
-			}
-
-			const balances = await getTokensBalanceByPublicKey(tokenAddress, publicKey);
-			const tokensInfo = await getListTokenInfo(tokenAddress);
+			const tokenServices = new TokenServices(req.RPC_URL);
+			const balances = await tokenServices.getTokensBalanceByPublicKey(tokenAddress, publicKey);
+			const tokensInfo = await tokenServices.getListTokenInfo(tokenAddress);
 			res.json(_.merge(balances, tokensInfo).filter((token) => token.name));
 		} catch (err) {
-			res.json(err);
+			res.status(500).json({ message: err.message });
 		}
 	},
 	getToken: async (req, res) => {
 		try {
 			const { tokenAddress } = req.params;
-			const tokenInfo = await getTokenInfo(tokenAddress);
+			const tokenServices = new TokenServices(req.RPC_URL);
+			const tokenInfo = await tokenServices.getTokenInfo(tokenAddress);
 			res.json(tokenInfo);
 		} catch (error) {
-			res.json(err);
+			res.status(500).json({ message: error.message });
 		}
 	},
 };

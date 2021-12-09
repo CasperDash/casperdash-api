@@ -1,44 +1,59 @@
 const { CLPublicKey } = require('casper-js-sdk');
-const { getStateRootHash, casperServiceRPC } = require('./CasperServices');
+const CasperServices = require('./CasperServices');
 
-const getAccountBalanceByUref = async (uref, stateRootHash) => {
-	try {
-		const rootHash = stateRootHash || (await getStateRootHash());
-		const balance = await casperServiceRPC.getAccountBalance(rootHash, uref);
-		return balance;
-	} catch {
-		return 0;
+class UserServices {
+	constructor(RPC_URL) {
+		this.casperServices = new CasperServices(RPC_URL);
 	}
-};
 
-/**
- * Get the current state of the account
- * @param {CLPublicKey} fromAccount main account public key
- * @param {String} stateRootHash
- * @returns {Object} account state
- */
-const getAccount = async (publicKey, stateRootHash) => {
-	try {
-		const rootHash = stateRootHash || (await getStateRootHash());
-		const publicKeyCL = CLPublicKey.fromHex(publicKey);
+	/**
+	 * Get account balance by uref
+	 * @param {string} uref
+	 * @param {string} stateRootHash
+	 */
+	getAccountBalanceByUref = async (uref, stateRootHash) => {
+		try {
+			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
+			const balance = await this.casperServices.casperServiceRPC.getAccountBalance(rootHash, uref);
+			return balance;
+		} catch {
+			return 0;
+		}
+	};
 
-		const account = await casperServiceRPC
-			.getBlockState(rootHash, publicKeyCL.toAccountHashStr(), [])
-			.then((res) => res.Account);
+	/**
+	 * Get the current state of the account
+	 * @param {CLPublicKey} fromAccount main account public key
+	 * @param {String} stateRootHash
+	 * @returns {Object} account state
+	 */
+	getAccount = async (publicKey, stateRootHash) => {
+		try {
+			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
+			const publicKeyCL = CLPublicKey.fromHex(publicKey);
 
-		return account;
-	} catch (error) {
-		throw error;
-	}
-};
+			const blockState = await this.casperServices.casperServiceRPC.getBlockState(
+				rootHash,
+				publicKeyCL.toAccountHashStr(),
+				[],
+			);
 
-const getAccountDetails = async (publicKey) => {
-	const account = await getAccount(publicKey);
-	const balance = await getAccountBalanceByUref(account && account.mainPurse);
-	return { ...account, balance };
-};
+			return blockState.Account;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
 
-module.exports = {
-	getAccount,
-	getAccountDetails,
-};
+	/**
+	 * Get account details
+	 * @param {string} publicKey
+	 */
+	getAccountDetails = async (publicKey) => {
+		const account = await this.getAccount(publicKey);
+		const balance = await this.getAccountBalanceByUref(account && account.mainPurse);
+		return { ...account, balance };
+	};
+}
+
+module.exports = UserServices;

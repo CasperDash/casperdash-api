@@ -1,4 +1,5 @@
 # API
+
 ### Install
 
 ```sh
@@ -8,8 +9,17 @@ npm install
 
 ### Usage
 
-RPC url can be updated at `.env` or `constants/index.js`
-
 ```sh
-npm start
+npm start     //mainnet
+npm run dev   //testnet
 ```
+
+### Document
+
+Check document at http://localhost:3001/api-docs after running
+
+![](https://i.imgur.com/kaDjQfF.png)
+
+### License
+
+[MIT](https://raw.githubusercontent.com/CasperDash/casperdash-client/develop/LICENSE)
