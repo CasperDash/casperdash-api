@@ -16,6 +16,8 @@ const allowCrossDomain = function (req, res, next) {
 	next();
 };
 app.use(allowCrossDomain);
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb' }));
 
 app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: true }));
