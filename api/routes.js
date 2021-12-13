@@ -26,4 +26,6 @@ module.exports = function (app) {
 	app.route('/validators').get(stakeController.getValidators);
 	// NFT
 	app.route('/nfts/getNFTsInfo').get(NFTController.getNFTs);
+	app.route('/nfts/:publicKey/NFTContracts').get(NFTController.getNFTContracts);
+	app.route('/nfts/getNFTContractDeploy').get(NFTController.getNFTContractDeploy);
 };

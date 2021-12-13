@@ -2,14 +2,25 @@ const { CLValueParsers, CLPublicKey, CLValueBuilder } = require('casper-js-sdk')
 const blake = require('blakejs');
 const { concat } = require('@ethersproject/bytes');
 const { NFT_CONFIG } = require('../../config');
+const { NFT_TOKEN_ATTRS } = require('../../constants');
 const CasperServices = require('../services/CasperServices');
+const UserServices = require('./UserService');
 
 const OWNED_TOKENS_BY_INDEX_NAMED_KEY = 'owned_tokens_by_index';
 const BALANCES_NAMED_KEY = 'balances';
 const METADATA_NAMED_KEY = 'metadata';
 
+const DEFAULT_NAMED_KEYS_CONF = {
+	[METADATA_NAMED_KEY]: {
+		attributes: [],
+	},
+};
+
+const NFT_CONTRACT_DEPLOY_HASH = '087bba895ed1c9d07c9f14438e99fae9f5ebe01dd076b1d25346e016a5fb559e';
+
 class NFTServices {
 	constructor(RPC_URL) {
+		this.RPC_URL = RPC_URL;
 		this.casperServices = new CasperServices(RPC_URL);
 	}
 
@@ -136,7 +147,7 @@ class NFTServices {
 
 		const NFTInfo = await Promise.all(
 			addresses.map(async (tokenAddress) => {
-				const { name, symbol, namedKeys = {} } = NFT_CONFIG[tokenAddress] || {};
+				const { name, symbol, namedKeys = DEFAULT_NAMED_KEYS_CONF } = NFT_CONFIG[tokenAddress] || {};
 
 				const tokenNamedKeys = [
 					OWNED_TOKENS_BY_INDEX_NAMED_KEY,
@@ -179,6 +190,32 @@ class NFTServices {
 		);
 
 		return NFTInfo.flat().filter(Boolean);
+	};
+
+	getNFTContractsInfo = async (publicKey) => {
+		const userServices = new UserServices(this.RPC_URL);
+
+		const stateRootHash = await this.casperServices.getStateRootHash();
+		const accountInfo = await userServices.getAccount(publicKey, stateRootHash);
+		if (!accountInfo.namedKeys || !accountInfo.namedKeys.length) {
+			return [];
+		}
+		const nftContracts = accountInfo.namedKeys
+			.filter((namedKey) => namedKey.name.match(/.*nft.*_contract$/g))
+			.map((contract) => contract.key);
+		return await Promise.all(
+			nftContracts.map(async (contract) => {
+				return {
+					address: contract,
+					...(await this.casperServices.getStateKeysValue(stateRootHash, contract, NFT_TOKEN_ATTRS)),
+				};
+			}),
+		);
+	};
+
+	getSampleNFTContract = async () => {
+		const session = await this.casperServices.getDeployJson(NFT_CONTRACT_DEPLOY_HASH);
+		return session;
 	};
 }
 
