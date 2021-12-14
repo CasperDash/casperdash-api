@@ -29,6 +29,7 @@ module.exports = function (app) {
 	// NFT
 	app.route('/nfts/getNFTsInfo').get(NFTController.getNFTs);
 	app.route('/nfts/:publicKey/NFTContracts').get(NFTController.getNFTContracts);
+	app.route('/nfts/contract/:contractAddress').get(NFTController.getContractInfo);
 	app.route('/nfts/getNFTContractDeploy').get(NFTController.getNFTContractDeploy);
 	// File
 	app.route('/file/storeFile').post(uploadMiddleware.single('image'), FileController.storeFile);

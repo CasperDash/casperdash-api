@@ -24,7 +24,7 @@ module.exports = {
 				return;
 			}
 			const nftServices = new NFTServices(req.RPC_URL);
-			const NFTContracts = await nftServices.getNFTContractsInfo(publicKey);
+			const NFTContracts = await nftServices.getNFTContractsInfoByPublicKey(publicKey);
 			res.json(NFTContracts);
 		} catch (err) {
 			res.status(500).json({ message: err.message });
@@ -37,6 +37,19 @@ module.exports = {
 			res.json(NFTContracts);
 		} catch (error) {
 			res.status(500).json({ message: error.message });
+		}
+	},
+	getContractInfo: async (req, res) => {
+		try {
+			const { contractAddress } = req.params;
+			if (!contractAddress) {
+				throw new Error('Contract address is required');
+			}
+			const nftServices = new NFTServices(req.RPC_URL);
+			const NFTContracts = await nftServices.getNFTContractsInfo(contractAddress);
+			res.json(NFTContracts);
+		} catch (err) {
+			res.status(500).json({ message: err.message });
 		}
 	},
 };

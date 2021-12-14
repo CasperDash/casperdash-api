@@ -190,7 +190,7 @@ class NFTServices {
 		return NFTInfo.flat().filter(Boolean);
 	};
 
-	getNFTContractsInfo = async (publicKey) => {
+	getNFTContractsInfoByPublicKey = async (publicKey) => {
 		const userServices = new UserServices(this.RPC_URL);
 
 		const stateRootHash = await this.casperServices.getStateRootHash();
@@ -209,6 +209,15 @@ class NFTServices {
 				};
 			}),
 		);
+	};
+
+	getNFTContractsInfo = async (contractAddress) => {
+		const stateRootHash = await this.casperServices.getStateRootHash();
+
+		return {
+			address: contractAddress,
+			...(await this.casperServices.getStateKeysValue(stateRootHash, `hash-${contractAddress}`, NFT_TOKEN_ATTRS)),
+		};
 	};
 
 	getSampleNFTContract = async () => {
