@@ -1,7 +1,7 @@
 const { CLValueParsers, CLPublicKey, CLValueBuilder } = require('casper-js-sdk');
 const blake = require('blakejs');
 const { concat } = require('@ethersproject/bytes');
-const { NFT_CONFIG } = require('../../config');
+const { NFT_CONFIG, NFT_SAMPLE_CONTRACT } = require('../../config');
 const { NFT_TOKEN_ATTRS } = require('../../constants');
 const CasperServices = require('../services/CasperServices');
 const UserServices = require('./UserService');
@@ -15,8 +15,6 @@ const DEFAULT_NAMED_KEYS_CONF = {
 		attributes: [],
 	},
 };
-
-const NFT_CONTRACT_DEPLOY_HASH = '087bba895ed1c9d07c9f14438e99fae9f5ebe01dd076b1d25346e016a5fb559e';
 
 class NFTServices {
 	constructor(RPC_URL) {
@@ -214,7 +212,10 @@ class NFTServices {
 	};
 
 	getSampleNFTContract = async () => {
-		const session = await this.casperServices.getDeployJson(NFT_CONTRACT_DEPLOY_HASH);
+		if (!NFT_SAMPLE_CONTRACT) {
+			throw new Error('No sample contract found');
+		}
+		const session = await this.casperServices.getDeployJson(NFT_SAMPLE_CONTRACT);
 		return session;
 	};
 }
