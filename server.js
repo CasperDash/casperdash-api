@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(bodyParser.json());
 app.use(/^(\/api-docs+|(?!\/api-docs).*)$/, casperNodeMiddleware);
 
-// Load environment variables from .env file.
+// Load environment variables from .env file while developing on local.
 require('dotenv').config();
 
 routes(app);
