@@ -48,7 +48,13 @@ describe('getTokenInfo', () => {
 		});
 		const value = await tokenServices.getTokenInfo('testaddress');
 
-		expect(value).toEqual({});
+		expect(value).toEqual({
+			address: 'testaddress',
+			decimals: '',
+			name: '',
+			symbol: '',
+			total_supply: '',
+		});
 	});
 });
 

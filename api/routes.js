@@ -32,4 +32,5 @@ module.exports = function (app) {
 	app.route('/nfts/getNFTContractDeploy').get(NFTController.getNFTContractDeploy);
 	// File
 	app.route('/file/storeFile').post(uploadMiddleware.single('image'), FileController.storeFile);
+	app.route('/file/:cid').delete(FileController.deleteFile);
 };
