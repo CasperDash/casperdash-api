@@ -2,8 +2,10 @@
 echo "Pulling lastest!"
 git pull
 
+nvm use default
+
 echo "Installing packages!"
-npm install
+yarn
 
 echo "Restart services!"
 pm2 restart pm2.config.js --env production
