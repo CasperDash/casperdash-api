@@ -2,6 +2,8 @@
 echo "Pulling lastest!"
 git pull
 
+nvm use default 
+
 echo "Installing packages!"
 yarn
 
