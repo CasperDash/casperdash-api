@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, feature/setup-nft-api-token ]
 
 jobs:
   build:
@@ -43,6 +43,8 @@ jobs:
           key: ${{ secrets.AWS_KEY }}
           script: |
             cd ~/stack/projects/casperdash-api
+            touch .env
+            echo NFT_STORAGE_API_TOKEN=${{ secrets.TESTNET_NFT_STORAGE_API_TOKEN }} >> .env
             git pull
             ./run-testnet.sh
 
