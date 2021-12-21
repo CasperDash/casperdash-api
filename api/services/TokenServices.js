@@ -24,10 +24,17 @@ class TokenServices {
 	getTokenInfo = async (contractAddress, stateRootHash) => {
 		try {
 			const rootHash = stateRootHash || (await this.casperServices.getStateRootHash());
-			const formattedAddressHash = `hash-${contractAddress}`;
+			const formattedAddressHash = contractAddress.includes('hash') ? contractAddress : `hash-${contractAddress}`;
 			const tokenInfo = await Promise.all(
 				ERC20_TOKEN_ATTRS.map(async (attr) => {
-					return { [attr]: await this.casperServices.getStateKeyValue(rootHash, formattedAddressHash, attr) };
+					try {
+						return {
+							[attr]: await this.casperServices.getStateKeyValue(rootHash, formattedAddressHash, attr),
+						};
+					} catch (error) {
+						console.error(error);
+						return { [attr]: '' };
+					}
 				}),
 			);
 			return tokenInfo.reduce((out, tokenAttr) => ({ ...out, ...tokenAttr }), { address: contractAddress });

@@ -1,3 +1,4 @@
+const uploadMiddleware = require('../middleware/uploadMiddleware');
 module.exports = function (app) {
 	const configController = require('./controllers/ConfigurationController');
 	const userController = require('./controllers/UserController');
@@ -6,6 +7,7 @@ module.exports = function (app) {
 	const tokenController = require('./controllers/TokenController');
 	const stakeController = require('./controllers/StakeController');
 	const NFTController = require('./controllers/NFTController');
+	const FileController = require('./controllers/FileController');
 
 	// Configuration
 	app.route('/configuration').get(configController.get);
@@ -26,4 +28,10 @@ module.exports = function (app) {
 	app.route('/validators').get(stakeController.getValidators);
 	// NFT
 	app.route('/nfts/getNFTsInfo').get(NFTController.getNFTs);
+	app.route('/nfts/:publicKey/NFTContracts').get(NFTController.getNFTContracts);
+	app.route('/nfts/contract/:contractAddress').get(NFTController.getContractInfo);
+	app.route('/nfts/getNFTContractDeploy').get(NFTController.getNFTContractDeploy);
+	// File
+	app.route('/file/storeFile').post(uploadMiddleware.single('image'), FileController.storeFile);
+	app.route('/file/:cid').delete(FileController.deleteFile);
 };

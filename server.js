@@ -16,11 +16,15 @@ const allowCrossDomain = function (req, res, next) {
 	next();
 };
 app.use(allowCrossDomain);
+app.use(express.json({ limit: '50mb' }));
 
 app.options('*', cors());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(bodyParser.json());
 app.use(/^(\/api-docs+|(?!\/api-docs).*)$/, casperNodeMiddleware);
+
+// Load environment variables from .env file while developing on local.
+require('dotenv').config();
 
 routes(app);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));

@@ -156,6 +156,24 @@ class CasperServices {
 	};
 
 	/**
+	 * Returns values of a key associated with global storage.
+	 * @param {String} stateRootHash - Root hash of global state at a recent block.
+	 * @param {String} stateKey - Key of an item within global state.
+	 * @param {Array} statePaths - List of Path of data associated with a key within a global state.
+	 * @return {Object} On-chain account information.
+	 */
+	getStateKeysValue = async (stateRootHash, stateKey, statePaths) => {
+		let value = {};
+		await Promise.all(
+			statePaths.map(async (statePath) => {
+				const stateValue = await this.getStateKeyValue(stateRootHash, stateKey, statePath);
+				value[statePath] = stateValue;
+			}),
+		);
+		return value;
+	};
+
+	/**
 	 * Parse public key to CL value to query on-chain.
 	 * @param {String} publicKey - Root hash of global state at a recent block.
 	 * @return {CLKey} CL value.
