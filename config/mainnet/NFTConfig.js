@@ -24,6 +24,11 @@ const NFT_CONFIG = {
 			},
 		},
 	},
+	b779E1b099e52A86D6D4Ac69eB09F0a458E7Fda27B1B8Fe806D12b00a5723174: {
+		name: 'Casperdash-nft',
+		symbol: 'CDAS',
+		namedKeys: { metadata: {} },
+	},
 };
 
 module.exports = { NFT_CONFIG };
