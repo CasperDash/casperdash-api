@@ -37,5 +37,7 @@ if (port) {
 }
 
 console.info('RESTful API server started on: ' + port);
+const network = process.env.NODE_ENV === 'mainnet' ? 'mainnet' : 'testnet';
+console.info(network);
 
 module.exports = app;
