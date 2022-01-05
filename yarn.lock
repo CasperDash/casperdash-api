@@ -738,6 +738,13 @@
   resolved "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.1.tgz"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/ws@^8.2.2":
+  version "8.2.2"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.2.2.tgz#7c5be4decb19500ae6b3d563043cd407bf366c21"
+  integrity sha512-NOn5eIcgWLOo6qW8AcuLZ7G8PycXu0xTxxkS6Q18VWFxgPUSOwV0pBj2a/4viNZVu25i7RIB7GttdkAIUUXOOg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/yargs-parser@*":
   version "20.2.1"
   resolved "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-20.2.1.tgz"
@@ -1360,16 +1367,17 @@ caniuse-lite@^1.0.30001280:
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001282.tgz"
   integrity sha512-YhF/hG6nqBEllymSIjLtR2iWDDnChvhnVJqp+vloyt2tEHFG1yBR+ac2B/rOw0qOK0m0lEXU2dv4E/sMk5P9Kg==
 
-casper-js-sdk@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.npmjs.org/casper-js-sdk/-/casper-js-sdk-2.7.1.tgz"
-  integrity sha512-vc9sXm4UEIjyMkxdsgy1QXiCW7uRg3+v6gSW2vhPk8shjtYdr/51Q+WrXy2cyqIc8a6/P/xiDGcLcOht+/AGIg==
+casper-js-sdk@^2.7.3:
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/casper-js-sdk/-/casper-js-sdk-2.7.4.tgz#287b5eea95196ca830c7130acf9b4d7d1b70413f"
+  integrity sha512-y/587DHKNDtOxl/BNwHssTnBLClFW3JyFg2z5AE0HAevda3clkyOCgpNgTMGuLF8LFOb/DBvXpfEAYl/F36cIQ==
   dependencies:
     "@ethersproject/bignumber" "^5.0.8"
     "@ethersproject/bytes" "^5.0.5"
     "@ethersproject/constants" "^5.0.5"
     "@open-rpc/client-js" "^1.6.2"
     "@types/eccrypto" "^1.1.2"
+    "@types/ws" "^8.2.2"
     blakejs "^1.1.0"
     eccrypto "^1.1.6"
     eslint-plugin-prettier "^3.4.0"
@@ -3667,6 +3675,11 @@ ms@^2.1.1:
   version "2.1.3"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
+
+multiformats@^9.5.6:
+  version "9.5.6"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.5.6.tgz#316c702117b21f5f53ed0f2857a117b361ae5af2"
+  integrity sha512-FAM5VaBdBl9Ya+DssXsWgZ+Nao07RtFUc+w0IgEuyHrg1b1ms+QoMUw8h7rtKcLuaJwfYJdf3Ms1205nq+j+Zg==
 
 nan@2.14.0, nan@^2.14.0:
   version "2.14.0"
