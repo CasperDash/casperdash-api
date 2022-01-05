@@ -171,7 +171,7 @@ class NFTServices {
 						balanceUref,
 						ownedTokensByIndexUref,
 					);
-					const contractInfo = { contractAddress: tokenAddress, name, symbol };
+					const contractInfo = { contractAddress: tokenAddress, nftContractName: name, symbol };
 
 					return await this.getNFTInfoByTokenId(
 						stateRootHash,
