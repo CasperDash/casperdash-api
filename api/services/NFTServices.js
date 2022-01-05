@@ -77,7 +77,17 @@ class NFTServices {
 	 */
 	getAttributeConfig = (attributeConf = [], key, value) => {
 		const conf = attributeConf.find((conf) => conf.key === key);
-		return conf ? { ...conf, value } : { key: key, name: key, value };
+		if (conf) {
+			const { massageFnc, strictKey, ...restConf } = conf;
+			const updatedKey = strictKey || key;
+			return {
+				...restConf,
+				value: typeof massageFnc === 'function' ? massageFnc(value) : value,
+				key: updatedKey,
+			};
+		}
+
+		return { key: key, name: key, value };
 	};
 
 	/**
@@ -150,6 +160,7 @@ class NFTServices {
 						tokenAddress,
 						tokenNamedKeys,
 					);
+
 					const { key: balanceUref } = namedKeysUref.find((uref) => uref.name === BALANCES_NAMED_KEY) || {};
 					const { key: ownedTokensByIndexUref } =
 						namedKeysUref.find((uref) => uref.name === OWNED_TOKENS_BY_INDEX_NAMED_KEY) || {};

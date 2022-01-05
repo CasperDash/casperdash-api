@@ -25,7 +25,9 @@ module.exports = {
 		try {
 			const casperServices = new CasperServices(req.RPC_URL);
 			const latestBlockHash = await casperServices.getLatestBlockHash();
-			res.json({ latestBlockHash });
+			res.json({
+				latestBlockHash,
+			});
 		} catch (error) {
 			res.status(500).json({ message: error.message });
 		}
