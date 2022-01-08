@@ -10,7 +10,7 @@ module.exports = function (app) {
 	const FileController = require('./controllers/FileController');
 
 	// Configuration
-	app.route('/configuration').get(configController.get);
+	app.route('/configurations').get(configController.get);
 	// User
 	app.route('/user/:publicKey').get(userController.get);
 	// Key Manager

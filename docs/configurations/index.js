@@ -1,10 +1,10 @@
 module.exports = {
-	'/configuration': {
+	'/configurations': {
 		// method of operation
 		get: {
 			tags: ['Configuration'], // operation's tag.
 			description: 'Get configurations', // operation's desc.
-			operationId: 'configuration', // unique operation id.
+			operationId: 'configurations', // unique operation id.
 			parameters: [], // expected params.
 			// expected responses
 			responses: {
