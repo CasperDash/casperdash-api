@@ -10,6 +10,8 @@ const OWNED_TOKENS_BY_INDEX_NAMED_KEY = 'owned_tokens_by_index';
 const BALANCES_NAMED_KEY = 'balances';
 const METADATA_NAMED_KEY = 'metadata';
 
+const CONTRACT_INFO_NAMED_KEYS = ['symbol', 'name', 'total_supply'];
+
 const DEFAULT_NAMED_KEYS_CONF = {
 	[METADATA_NAMED_KEY]: {
 		attributes: [],
@@ -144,6 +146,32 @@ class NFTServices {
 	};
 
 	/**
+	 * Get contract info by contract address hash
+	 * @param {String} contractAddress contract address hash
+	 * @param {String} stateRootHash
+	 * @returns {Object} contract info
+	 */
+	getContractInfo = async (contractAddress, stateRootHash) => {
+		const contractInfo = await Promise.all(
+			CONTRACT_INFO_NAMED_KEYS.map(async (attr) => {
+				try {
+					return {
+						[attr]: await this.casperServices.getStateKeyValue(
+							stateRootHash,
+							`hash-${contractAddress}`,
+							attr,
+						),
+					};
+				} catch (error) {
+					console.error(error);
+					return { [attr]: '' };
+				}
+			}),
+		);
+		return contractInfo.reduce((out, info) => ({ ...out, ...info }), {});
+	};
+
+	/**
 	 * Get information for each NFT
 	 * @param {Array} tokenAddressList - List of NFT contract address.
 	 * @param {String} publicKey - Public key.
@@ -156,7 +184,7 @@ class NFTServices {
 		const NFTInfo = await Promise.all(
 			addresses.map(async (tokenAddress) => {
 				const { name, symbol, namedKeys = DEFAULT_NAMED_KEYS_CONF } = NFT_CONFIG[tokenAddress] || {};
-
+				const nftContractInfo = await this.getContractInfo(tokenAddress, stateRootHash);
 				const tokenNamedKeys = [
 					OWNED_TOKENS_BY_INDEX_NAMED_KEY,
 					BALANCES_NAMED_KEY,
@@ -182,7 +210,12 @@ class NFTServices {
 						balanceUref,
 						ownedTokensByIndexUref,
 					);
-					const contractInfo = { contractAddress: tokenAddress, nftContractName: name, symbol };
+					const contractInfo = {
+						contractAddress: tokenAddress,
+						nftContractName: nftContractInfo.name || name,
+						symbol: nftContractInfo.symbol || symbol,
+						totalSupply: nftContractInfo.total_supply,
+					};
 
 					return await this.getNFTInfoByTokenId(
 						stateRootHash,

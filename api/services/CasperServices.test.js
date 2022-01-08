@@ -142,18 +142,18 @@ describe('getDeploysStatus', () => {
 		expect(deploy).toEqual([{ hash: 'testhash', status: 'pending' }]);
 	});
 
-	test('Should return deploy with fail status', async () => {
+	test('Should return deploy with failed status', async () => {
 		spyOn.mockReturnValue([{ execution_results: [{ result: { Failure: {} } }], deploy: { hash: 'testhash' } }]);
 		const value = await casperServices.getDeploysStatus('testhash');
 		expect(spyOn).toHaveBeenCalled();
-		expect(value).toEqual([{ hash: 'testhash', status: 'fail' }]);
+		expect(value).toEqual([{ hash: 'testhash', status: 'failed' }]);
 	});
 
-	test('Should return deploy with success status', async () => {
+	test('Should return deploy with completed status', async () => {
 		spyOn.mockReturnValue([{ execution_results: [{ result: {} }], deploy: { hash: 'testhash' } }]);
 		const value = await casperServices.getDeploysStatus('testhash');
 		expect(spyOn).toHaveBeenCalled();
-		expect(value).toEqual([{ hash: 'testhash', status: 'success' }]);
+		expect(value).toEqual([{ hash: 'testhash', status: 'completed' }]);
 	});
 });
 
