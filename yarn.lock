@@ -1607,6 +1607,7 @@ caniuse-lite@^1.0.30001286:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001286.tgz#3e9debad420419618cfdf52dc9b6572b28a8fff6"
   integrity sha512-zaEMRH6xg8ESMi2eQ3R4eZ5qw/hJiVsO/HlLwniIwErij0JDr9P+8V4dtx1l+kLq6j3yy8l8W4fst1lBnat5wQ==
 
+<<<<<<< HEAD
 carbites@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/carbites/-/carbites-1.0.6.tgz#0eac206c87b60e09b758a4e820af000dda4f8dd1"
@@ -1621,6 +1622,12 @@ casper-js-sdk@^2.7.3:
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/casper-js-sdk/-/casper-js-sdk-2.7.3.tgz#7af0959ac3080bec9e7b82442439ee6932ee6f7f"
   integrity sha512-LChaBRgeSb0B3yQ9akppQLxbb+JdrpF35+YkE0Cndqho5v28MclVejxayD/Put0xSfwDMBRxKLh/ILNKUFsaTg==
+=======
+casper-js-sdk@^2.7.3:
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/casper-js-sdk/-/casper-js-sdk-2.7.4.tgz#287b5eea95196ca830c7130acf9b4d7d1b70413f"
+  integrity sha512-y/587DHKNDtOxl/BNwHssTnBLClFW3JyFg2z5AE0HAevda3clkyOCgpNgTMGuLF8LFOb/DBvXpfEAYl/F36cIQ==
+>>>>>>> 48a524e56c714fd44bd9e41d0b665ed6a6742078
   dependencies:
     "@ethersproject/bignumber" "^5.0.8"
     "@ethersproject/bytes" "^5.0.5"
@@ -4477,6 +4484,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
+<<<<<<< HEAD
 multer@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/multer/-/multer-1.4.4.tgz#e2bc6cac0df57a8832b858d7418ccaa8ebaf7d8c"
@@ -4515,17 +4523,23 @@ multiformats@^9.0.4, multiformats@^9.3.0, multiformats@^9.4.10, multiformats@^9.
   resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.5.4.tgz#bf60eee834f7bcbd3a61b1c61d7e8d6b158a0f63"
   integrity sha512-MFT8e8BOLX7OZKfSBGm13FwYvJVI6MEcZ7hujUCpyJwvYyrC1anul50A0Ee74GdeJ77aYTO6YU1vO+oF8NqSIw==
 
+=======
+>>>>>>> 48a524e56c714fd44bd9e41d0b665ed6a6742078
 multiformats@^9.5.6:
   version "9.5.6"
   resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.5.6.tgz#316c702117b21f5f53ed0f2857a117b361ae5af2"
   integrity sha512-FAM5VaBdBl9Ya+DssXsWgZ+Nao07RtFUc+w0IgEuyHrg1b1ms+QoMUw8h7rtKcLuaJwfYJdf3Ms1205nq+j+Zg==
 
+<<<<<<< HEAD
 murmurhash3js-revisited@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/murmurhash3js-revisited/-/murmurhash3js-revisited-3.0.0.tgz#6bd36e25de8f73394222adc6e41fa3fac08a5869"
   integrity sha512-/sF3ee6zvScXMb1XFJ8gDsSnY+X8PbOyjIuBhtgis10W2Jx4ZjIhikUCIF9c4gpJxVnQIsPAFrSwTCuAjicP6g==
 
 nan@2.14.0:
+=======
+nan@2.14.0, nan@^2.14.0:
+>>>>>>> 48a524e56c714fd44bd9e41d0b665ed6a6742078
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==

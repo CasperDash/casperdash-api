@@ -26,12 +26,12 @@ const NFT_CONFIG = {
 			},
 		},
 	},
-	b779e1b099e52a86d6d4ac69eb09f0a458e7fda27b1b8fe806d12b00a5723174: {
+	b779E1b099e52A86D6D4Ac69eB09F0a458E7Fda27B1B8Fe806D12b00a5723174: {
 		name: 'Casperdash-nft',
 		symbol: 'CDAS',
 		namedKeys: { metadata: {} },
 	},
-	'55cc25981545886d019401a40768adf71084ff4c251734b54280c3f1d600c9d1': {
+	'55cc25981545886D019401a40768Adf71084Ff4c251734b54280C3F1d600c9D1': {
 		name: 'CasperPunks',
 		symbol: 'CSPR-PNK',
 		namedKeys: {
