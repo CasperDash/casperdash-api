@@ -1,5 +1,5 @@
 const NFT_CONFIG = {
-	F4a75b1a0c1858bc4883165441107e0d23756E4ebdbD558918aD39231f1C7728: {
+	f4a75b1a0c1858bc4883165441107e0d23756e4ebdbd558918ad39231f1c7728: {
 		name: 'CasperDash',
 		symbol: 'CDAS',
 		namedKeys: {

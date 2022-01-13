@@ -55,11 +55,11 @@ describe('getDeploysStatus', () => {
 		const mockRequest = {
 			query: {},
 		};
-		mockGetDeploysStatus.mockReturnValue([{ hash: 'testhash', status: 'success' }]);
+		mockGetDeploysStatus.mockReturnValue([{ hash: 'testhash', status: 'completed' }]);
 		await deployController.getDeploysStatus(mockRequest, mockResponse);
 		expect(mockGetDeploysStatus).toHaveBeenCalled();
 		expect(mockJson).toHaveBeenCalled();
-		expect(mockJson).toHaveBeenCalledWith([{ hash: 'testhash', status: 'success' }]);
+		expect(mockJson).toHaveBeenCalledWith([{ hash: 'testhash', status: 'completed' }]);
 	});
 	test('Should return error', async () => {
 		const mockRequest = {

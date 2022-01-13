@@ -1,7 +1,22 @@
-const { MOTE_RATE } = require('../../constants');
+const {
+	MOTE_RATE,
+	CSPR_TRANSFER_FEE,
+	CSPR_AUCTION_DELEGATE_FEE,
+	CSPR_AUCTION_UNDELEGATE_FEE,
+	TOKEN_TRANSFER_FEE,
+	IPFS_GATEWAY,
+} = require('../../constants');
 
 module.exports = {
 	get: async (req, res) => {
-		res.json({ MOTE_RATE, API_VERSION: '1.0.1' });
+		res.json({
+			MOTE_RATE,
+			API_VERSION: '1.1.0',
+			CSPR_TRANSFER_FEE,
+			CSPR_AUCTION_DELEGATE_FEE,
+			CSPR_AUCTION_UNDELEGATE_FEE,
+			TOKEN_TRANSFER_FEE,
+			IPFS_GATEWAY,
+		});
 	},
 };

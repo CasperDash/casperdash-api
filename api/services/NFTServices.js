@@ -1,15 +1,26 @@
 const { CLValueParsers, CLPublicKey, CLValueBuilder } = require('casper-js-sdk');
 const blake = require('blakejs');
 const { concat } = require('@ethersproject/bytes');
-const { NFT_CONFIG } = require('../../config');
+const { NFT_CONFIG, NFT_SAMPLE_CONTRACT } = require('../../config');
+const { NFT_TOKEN_ATTRS } = require('../../constants');
 const CasperServices = require('../services/CasperServices');
+const UserServices = require('./UserService');
 
 const OWNED_TOKENS_BY_INDEX_NAMED_KEY = 'owned_tokens_by_index';
 const BALANCES_NAMED_KEY = 'balances';
 const METADATA_NAMED_KEY = 'metadata';
 
+const CONTRACT_INFO_NAMED_KEYS = ['symbol', 'name', 'total_supply'];
+
+const DEFAULT_NAMED_KEYS_CONF = {
+	[METADATA_NAMED_KEY]: {
+		attributes: [],
+	},
+};
+
 class NFTServices {
 	constructor(RPC_URL) {
+		this.RPC_URL = RPC_URL;
 		this.casperServices = new CasperServices(RPC_URL);
 	}
 
@@ -135,6 +146,32 @@ class NFTServices {
 	};
 
 	/**
+	 * Get contract info by contract address hash
+	 * @param {String} contractAddress contract address hash
+	 * @param {String} stateRootHash
+	 * @returns {Object} contract info
+	 */
+	getContractInfo = async (contractAddress, stateRootHash) => {
+		const contractInfo = await Promise.all(
+			CONTRACT_INFO_NAMED_KEYS.map(async (attr) => {
+				try {
+					return {
+						[attr]: await this.casperServices.getStateKeyValue(
+							stateRootHash,
+							`hash-${contractAddress}`,
+							attr,
+						),
+					};
+				} catch (error) {
+					console.error(error);
+					return { [attr]: '' };
+				}
+			}),
+		);
+		return contractInfo.reduce((out, info) => ({ ...out, ...info }), {});
+	};
+
+	/**
 	 * Get information for each NFT
 	 * @param {Array} tokenAddressList - List of NFT contract address.
 	 * @param {String} publicKey - Public key.
@@ -146,8 +183,8 @@ class NFTServices {
 
 		const NFTInfo = await Promise.all(
 			addresses.map(async (tokenAddress) => {
-				const { name, symbol, namedKeys = {} } = NFT_CONFIG[tokenAddress] || {};
-
+				const { name, symbol, namedKeys = DEFAULT_NAMED_KEYS_CONF } = NFT_CONFIG[tokenAddress] || {};
+				const nftContractInfo = await this.getContractInfo(tokenAddress, stateRootHash);
 				const tokenNamedKeys = [
 					OWNED_TOKENS_BY_INDEX_NAMED_KEY,
 					BALANCES_NAMED_KEY,
@@ -173,7 +210,12 @@ class NFTServices {
 						balanceUref,
 						ownedTokensByIndexUref,
 					);
-					const contractInfo = { contractAddress: tokenAddress, name, symbol };
+					const contractInfo = {
+						contractAddress: tokenAddress,
+						nftContractName: nftContractInfo.name || name,
+						symbol: nftContractInfo.symbol || symbol,
+						totalSupply: nftContractInfo.total_supply,
+					};
 
 					return await this.getNFTInfoByTokenId(
 						stateRootHash,
@@ -190,6 +232,44 @@ class NFTServices {
 		);
 
 		return NFTInfo.flat().filter(Boolean);
+	};
+
+	getNFTContractsInfoByPublicKey = async (publicKey) => {
+		const userServices = new UserServices(this.RPC_URL);
+
+		const stateRootHash = await this.casperServices.getStateRootHash();
+		const accountInfo = await userServices.getAccount(publicKey, stateRootHash);
+		if (!accountInfo.namedKeys || !accountInfo.namedKeys.length) {
+			return [];
+		}
+		const nftContracts = accountInfo.namedKeys
+			.filter((namedKey) => namedKey.name.match(/.*nft.*_contract$/g))
+			.map((contract) => contract.key);
+		return await Promise.all(
+			nftContracts.map(async (contract) => {
+				return {
+					address: contract,
+					...(await this.casperServices.getStateKeysValue(stateRootHash, contract, NFT_TOKEN_ATTRS)),
+				};
+			}),
+		);
+	};
+
+	getNFTContractsInfo = async (contractAddress) => {
+		const stateRootHash = await this.casperServices.getStateRootHash();
+
+		return {
+			address: contractAddress,
+			...(await this.casperServices.getStateKeysValue(stateRootHash, `hash-${contractAddress}`, NFT_TOKEN_ATTRS)),
+		};
+	};
+
+	getSampleNFTContract = async () => {
+		if (!NFT_SAMPLE_CONTRACT) {
+			throw new Error('No sample contract found');
+		}
+		const session = await this.casperServices.getDeployJson(NFT_SAMPLE_CONTRACT);
+		return session;
 	};
 }
 

@@ -1,0 +1,3 @@
+module.exports = {
+	NFT_SAMPLE_CONTRACT: 'b779e1b099e52a86d6d4ac69eb09f0a458e7fda27b1b8fe806d12b00a5723174',
+};
