@@ -1618,9 +1618,9 @@ carbites@^1.0.6:
     multiformats "^9.0.4"
 
 casper-js-sdk@^2.7.3:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/casper-js-sdk/-/casper-js-sdk-2.7.3.tgz#7af0959ac3080bec9e7b82442439ee6932ee6f7f"
-  integrity sha512-LChaBRgeSb0B3yQ9akppQLxbb+JdrpF35+YkE0Cndqho5v28MclVejxayD/Put0xSfwDMBRxKLh/ILNKUFsaTg==
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/casper-js-sdk/-/casper-js-sdk-2.7.4.tgz#287b5eea95196ca830c7130acf9b4d7d1b70413f"
+  integrity sha512-y/587DHKNDtOxl/BNwHssTnBLClFW3JyFg2z5AE0HAevda3clkyOCgpNgTMGuLF8LFOb/DBvXpfEAYl/F36cIQ==
   dependencies:
     "@ethersproject/bignumber" "^5.0.8"
     "@ethersproject/bytes" "^5.0.5"
