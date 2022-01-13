@@ -1,6 +1,6 @@
 {
 	"name": "casperdash_api",
-	"version": "1.3.0",
+	"version": "1.1.0",
 	"description": "CasperDash APIs",
 	"main": "index.js",
 	"scripts": {
@@ -26,10 +26,13 @@
 	},
 	"dependencies": {
 		"axios": "^0.24.0",
-		"casper-js-sdk": "^2.7.1",
+		"casper-js-sdk": "^2.7.3",
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
-		"lodash": "^4.17.21"
+		"lodash": "^4.17.21",
+		"multer": "^1.4.4",
+		"nft.storage": "^5.1.3",
+		"multiformats": "^9.5.6"
 	}
 }

@@ -1,7 +1,19 @@
 const MOTE_RATE = 1000000000;
 const ERC20_TOKEN_ATTRS = ['name', 'symbol', 'total_supply', 'decimals'];
+const NFT_TOKEN_ATTRS = ['name', 'symbol', 'total_supply'];
+const CSPR_TRANSFER_FEE = 0.1;
+const CSPR_AUCTION_DELEGATE_FEE = 5;
+const CSPR_AUCTION_UNDELEGATE_FEE = 0.00001;
+const TOKEN_TRANSFER_FEE = 1;
+const IPFS_GATEWAY = 'ipfs.dweb.link';
 
 module.exports = {
 	MOTE_RATE,
 	ERC20_TOKEN_ATTRS,
+	NFT_TOKEN_ATTRS,
+	CSPR_TRANSFER_FEE,
+	CSPR_AUCTION_DELEGATE_FEE,
+	CSPR_AUCTION_UNDELEGATE_FEE,
+	TOKEN_TRANSFER_FEE,
+	IPFS_GATEWAY,
 };
