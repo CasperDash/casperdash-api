@@ -8,8 +8,9 @@ const keyManager = require('./keyManager');
 const token = require('./token');
 const validators = require('./validators');
 const NFT = require('./NFT');
+const user = require('./user');
 
-const paths = { paths: { ...configurations, ...deploy, ...keyManager, ...token, ...validators, ...NFT } };
+const paths = { paths: { ...configurations, ...deploy, ...keyManager, ...token, ...validators, ...NFT, ...user } };
 
 module.exports = {
 	...basicInfo,
