@@ -7,5 +7,13 @@ const mockResponse = {
 test('Should return configuration', () => {
 	configurationController.get(mockRequest, mockResponse);
 	expect(mockJson).toHaveBeenCalled();
-	expect(mockJson).toHaveBeenCalledWith({ MOTE_RATE: 1000000000, API_VERSION: '1.0.1' });
+	expect(mockJson).toHaveBeenCalledWith({
+		API_VERSION: '1.0.1',
+		CSPR_AUCTION_DELEGATE_FEE: 5,
+		CSPR_AUCTION_UNDELEGATE_FEE: 0.00001,
+		CSPR_TRANSFER_FEE: 0.1,
+		IPFS_GATEWAY: 'ipfs.dweb.link',
+		MOTE_RATE: 1000000000,
+		TOKEN_TRANSFER_FEE: 1,
+	});
 });

@@ -4,7 +4,7 @@
 	"description": "CasperDash APIs",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --coverage --watchAll",
 		"start": "NODE_ENV=mainnet PORT=3001 nodemon server.js",
 		"dev": "NODE_ENV=testnet PORT=3001 nodemon server.js",
 		"mainnet": "NODE_ENV=mainnet PORT=3001 node server.js"
