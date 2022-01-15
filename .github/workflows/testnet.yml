@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, "release/1.1.1" ]
 
 jobs:
   build:
@@ -26,6 +26,7 @@ jobs:
     - name: Install packages and test
       run: |
         npm install --production
+        npm run test
       env:
         CI: true 
   
