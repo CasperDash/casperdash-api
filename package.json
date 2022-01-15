@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest --coverage --watchAll",
+		"test-ci": "jest --coverage",
 		"start": "NODE_ENV=mainnet PORT=3001 nodemon server.js",
 		"dev": "NODE_ENV=testnet PORT=3001 nodemon server.js",
 		"mainnet": "NODE_ENV=mainnet PORT=3001 node server.js"
