@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master, "release/1.1.1" ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -49,3 +49,16 @@ jobs:
             echo NFT_STORAGE_API_TOKEN=${{ secrets.NFT_STORAGE_API_TOKEN }} > .env
             git pull
             ./run.sh
+
+  notification:
+
+      needs: [deploy]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Send build result to slack channel
+          uses: rtCamp/action-slack-notify@v2
+          env: 
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            SLACK_COLOR: ${{ job.status }}
+            SLACK_FOOTER: Powered by CasperDash
