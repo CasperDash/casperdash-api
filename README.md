@@ -28,6 +28,9 @@ Check document at http://localhost:3001/api-docs after running
 
 ![](https://i.imgur.com/kaDjQfF.png)
 
+### Workflow and contributions
+https://github.com/CasperDash/casperdash-client/wiki/Development-Workflow
+
 ### License
 
 [MIT](https://raw.githubusercontent.com/CasperDash/casperdash-api/master/LICENSE)
