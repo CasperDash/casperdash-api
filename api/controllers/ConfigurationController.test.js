@@ -9,7 +9,7 @@ test('Should return configuration', () => {
 	expect(mockJson).toHaveBeenCalled();
 	expect(mockJson).toHaveBeenCalledWith({
 		API_VERSION: '1.1.1',
-		CSPR_AUCTION_DELEGATE_FEE: 5,
+		CSPR_AUCTION_DELEGATE_FEE: 2.5,
 		CSPR_AUCTION_UNDELEGATE_FEE: 0.00001,
 		CSPR_TRANSFER_FEE: 0.1,
 		IPFS_GATEWAY: 'ipfs.dweb.link',
