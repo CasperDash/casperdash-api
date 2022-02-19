@@ -1,12 +1,16 @@
 const { CasperPunkImageMassage } = require('../helpers/NFT');
 
 const NFT_CONFIG = {
+	// Contract hash is key
 	'6cdf5a5e23eedb6b79cfe52d16fa07cbdece9516b13dde03e6c28b288d5c3a7c': {
-		name: 'CaskCollectibleToken',
-		symbol: 'CTT',
+		name: 'CaskCollectibleToken', // token name
+		symbol: 'CTT', // token symbol
 		namedKeys: {
+			// all named keys that you want to get should be list
 			metadata: {
+				// metadata named key
 				attributes: [
+					// list attributes which you want to massage before return to client
 					{ key: 'bg', name: 'Background' },
 					{ key: 'description', name: 'Description' },
 					{ key: 'distillery', name: 'Distillery' },
