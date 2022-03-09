@@ -1,4 +1,3 @@
-const { rest } = require('lodash');
 const UserServices = require('../services/UserService');
 
 module.exports = {
@@ -21,11 +20,8 @@ module.exports = {
 			}
 			const userServices = new UserServices(req.RPC_URL);
 			const promises = publicKeys.map((publicKey) => userServices.getAccountDetails(publicKey));
-			const accounts = await Promise.allSettled(promises);
-			const accountsHaveBalance = accounts
-				.filter((account) => account.status === 'fulfilled')
-				.map((account) => account.value);
-			res.json(accountsHaveBalance);
+			const accounts = await Promise.all(promises);
+			res.json(accounts);
 		} catch (error) {
 			res.status(500).json({ message: error.message });
 		}
