@@ -21,8 +21,11 @@ module.exports = {
 			}
 			const userServices = new UserServices(req.RPC_URL);
 			const promises = publicKeys.map((publicKey) => userServices.getAccountDetails(publicKey));
-			const accounts = await Promise.all(promises);
-			res.json(accounts);
+			const accounts = await Promise.allSettled(promises);
+			const accountsHaveBalance = accounts
+				.filter((account) => account.status === 'fulfilled')
+				.map((account) => account.value);
+			res.json(accountsHaveBalance);
 		} catch (error) {
 			res.status(500).json({ message: error.message });
 		}

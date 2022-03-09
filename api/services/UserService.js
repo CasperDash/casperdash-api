@@ -52,7 +52,7 @@ class UserServices {
 	getAccountDetails = async (publicKey) => {
 		const account = await this.getAccount(publicKey);
 		const balance = await this.getAccountBalanceByUref(account && account.mainPurse);
-		return { ...account, balance };
+		return { ...account, balance, publicKey };
 	};
 }
 
