@@ -13,6 +13,8 @@ module.exports = function (app) {
 	app.route('/configurations').get(configController.get);
 	// User
 	app.route('/user/:publicKey').get(userController.get);
+	app.route('/users').post(userController.fetch);
+
 	// Key Manager
 	app.route('/keyManager/:publicKey').get(keyManagerController.get);
 	app.route('/getKeysManagerDeploy').get(keyManagerController.getKeyManagerContractDeploy);
