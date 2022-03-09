@@ -41,7 +41,8 @@ class UserServices {
 			return blockState.Account;
 		} catch (error) {
 			console.error(error);
-			throw error;
+			// Ignore the error JSONRPCError: state query failed: ValueNotFound because the account has not received any CSPR yet.
+			return {};
 		}
 	};
 
@@ -52,7 +53,7 @@ class UserServices {
 	getAccountDetails = async (publicKey) => {
 		const account = await this.getAccount(publicKey);
 		const balance = await this.getAccountBalanceByUref(account && account.mainPurse);
-		return { ...account, balance };
+		return { ...account, balance, publicKey };
 	};
 }
 
