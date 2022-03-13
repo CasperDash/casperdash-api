@@ -65,6 +65,6 @@ describe('getAccountDetails', () => {
 		const accountDetails = await userServices.getAccountDetails('testkey');
 		expect(spyOnGetAccount).toHaveBeenCalled();
 		expect(spyOnGetAccountBalanceByUref).toHaveBeenCalled();
-		expect(accountDetails).toEqual({ publicKey: 'getAccount', balance: 10 });
+		expect(accountDetails).toEqual({ publicKey: 'testkey', balance: 10 });
 	});
 });
