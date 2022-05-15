@@ -1,3 +1,4 @@
+const { PARTNERSHIP_VALIDATORS } = require('../../constants');
 const CasperServices = require('./CasperServices');
 
 class ValidatorServices {
@@ -37,7 +38,7 @@ class ValidatorServices {
 		}
 
 		validatorsWithBidInfo = this.massageValidators(validatorWeights, bids);
-		return validatorsWithBidInfo;
+		return this.sortValidators(validatorsWithBidInfo);
 	};
 
 	/**
@@ -59,6 +60,29 @@ class ValidatorServices {
 		const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
 		validator.bidInfo = bid;
 		return validator;
+	};
+	/**
+	 * Sort validators based on PARTNERSHIP_VALIDATORS
+	 * @param {array} validators
+	 * @returns {array}
+	 */
+	sortValidators = (validators) => {
+		if (!PARTNERSHIP_VALIDATORS || !PARTNERSHIP_VALIDATORS.length) {
+			return validators;
+		}
+
+		validators
+			.map((validator) => {
+				const foundValidator = PARTNERSHIP_VALIDATORS.find(
+					(partnership) => partnership.public_key === validator.public_key,
+				);
+
+				validator.priority = foundValidator ? foundValidator.priority : 0;
+				return validator;
+			})
+			.sort((a, b) => b.priority - a.priority);
+
+		return validators;
 	};
 }
 
