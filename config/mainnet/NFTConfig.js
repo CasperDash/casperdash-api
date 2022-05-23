@@ -44,6 +44,15 @@ const NFT_CONFIG = {
 			},
 		},
 	},
+	'46bd6b13b50de832adaed91609d90198c40b3673ffe688a3ccf7c14266461eb5': {
+		name: 'selfie',
+		symbol: 'SELFIE',
+		namedKeys: {
+			metadata: {
+				attributes: [{ key: 'url', name: 'image', strictKey: 'image' }],
+			},
+		},
+	},
 };
 
 module.exports = { NFT_CONFIG };
