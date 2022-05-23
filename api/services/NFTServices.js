@@ -118,7 +118,7 @@ class NFTServices {
 								const { key: uref } = namedKeysUref.find((uref) => uref.name === namedKey) || {};
 								const namedKeyValue = await this.casperServices.dictionaryValueGetter(
 									stateRootHash,
-									tokenId,
+									tokenId.toString(),
 									uref,
 								);
 								const values = namedKeyValue.unwrap().value();
