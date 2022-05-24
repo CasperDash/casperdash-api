@@ -62,7 +62,9 @@ class ValidatorServices {
 		return validator;
 	};
 	/**
-	 * Sort validators based on PARTNERSHIP_VALIDATORS
+	 * Sort validators based on PARTNERSHIP_VALIDATORS by
+	 * 1. Sorting the PARTNERSHIP_VALIDATORS
+	 * 2. Remove and insert the found validator in the first position of array.
 	 * @param {array} validators
 	 * @returns {array}
 	 */
@@ -71,16 +73,17 @@ class ValidatorServices {
 			return validators;
 		}
 
-		validators
-			.map((validator) => {
-				const foundValidator = PARTNERSHIP_VALIDATORS.find(
-					(partnership) => partnership.public_key === validator.public_key,
-				);
-
-				validator.priority = foundValidator ? foundValidator.priority : 0;
-				return validator;
-			})
-			.sort((a, b) => b.priority - a.priority);
+		PARTNERSHIP_VALIDATORS.sort((a, b) => a.priority - b.priority).forEach(
+			({ priority, public_key, name, logo }) => {
+				const foundIdx = validators.findIndex((validator) => validator.public_key === public_key);
+				if (foundIdx < 0) {
+					return;
+				}
+				const foundValidator = { ...validators[foundIdx], priority, public_key, name, logo };
+				validators.splice(foundIdx, 1);
+				validators.unshift(foundValidator);
+			},
+		);
 
 		return validators;
 	};
