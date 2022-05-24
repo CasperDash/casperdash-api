@@ -89,10 +89,6 @@ describe('getValidators', () => {
 		expect(mockGetCurrentEraId).toHaveBeenCalled();
 		expect(mockGetValidatorsInfo).toHaveBeenCalled();
 		expect(spyOnMassageValidators).toHaveBeenCalled();
-		expect(validators).toEqual([
-			{
-				priority: 0,
-			},
-		]);
+		expect(validators).toEqual([{}]);
 	});
 });
