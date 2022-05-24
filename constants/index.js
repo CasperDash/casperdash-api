@@ -16,6 +16,8 @@ const OLD_NFT_SMART_CONTRACT_ADDRESSES = [
 const PARTNERSHIP_VALIDATORS = [
 	{
 		public_key: '01bfe29c4645582cab79fea369dcffab349676c8970ad80a99a8518c7453ea393e',
+		name: 'OriginStake - Only 1% fee until May 15 🔥🔥',
+		logo: 'https://originstake.com/.well-known/casper/originstake_logo_vali_256.png',
 		priority: 10,
 	},
 ];
