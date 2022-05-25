@@ -13,13 +13,7 @@ const OLD_NFT_SMART_CONTRACT_ADDRESSES = [
 	'e6376c6f97c9464a79bfc100247bea4ee054b264d19bc9294fc85b151ec3fb8c',
 	'b779E1b099e52A86D6D4Ac69eB09F0a458E7Fda27B1B8Fe806D12b00a5723174',
 ];
-const PARTNERSHIP_VALIDATORS = [
-	{
-		public_key: '01028e248170a7f328bf7a04696d8f271a1debb54763e05e537eefc1cf24531bc7',
-		name: 'OriginStake - Only 1% fee until May 15 🔥🔥',
-		logo: 'https://originstake.com/.well-known/casper/originstake_logo_vali_256.png',
-		priority: 10,
-	},
+const PARTNERSHIP_VALIDATORS = process.env.PARTNERSHIP_VALIDATORS || [
 	{
 		public_key: '01bfe29c4645582cab79fea369dcffab349676c8970ad80a99a8518c7453ea393e',
 		name: 'OriginStake - Only 1% fee until May 15 🔥🔥',
