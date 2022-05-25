@@ -24,7 +24,7 @@ test('Should return configuration', () => {
 		],
 		PARTNERSHIP_VALIDATORS: [
 			{
-				public_key: '01bfe29c4645582cab79fea369dcffab349676c8970ad80a99a8518c7453ea393e',
+				public_key: '01028e248170a7f328bf7a04696d8f271a1debb54763e05e537eefc1cf24531bc7',
 				name: 'OriginStake - Only 1% fee until May 15 🔥🔥',
 				logo: 'https://originstake.com/.well-known/casper/originstake_logo_vali_256.png',
 				priority: 10,
