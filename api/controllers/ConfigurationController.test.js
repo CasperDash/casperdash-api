@@ -8,7 +8,7 @@ test('Should return configuration', () => {
 	configurationController.get(mockRequest, mockResponse);
 	expect(mockJson).toHaveBeenCalled();
 	expect(mockJson).toHaveBeenCalledWith({
-		API_VERSION: '1.1.2',
+		API_VERSION: '1.1.6',
 		CSPR_AUCTION_DELEGATE_FEE: 2.5,
 		CSPR_AUCTION_UNDELEGATE_FEE: 0.00001,
 		CSPR_TRANSFER_FEE: 0.1,
