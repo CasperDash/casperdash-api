@@ -30,29 +30,9 @@ jobs:
       env:
         CI: true 
   
-  deploy:
-
-    needs: [build]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: SSH and deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_TESTNET_HOST }}
-          username: ${{ secrets.AWS_DEPLOY_USER }}
-          key: ${{ secrets.AWS_KEY }}
-          script: |
-            source ~/.profile 
-            cd ~/stack/projects/casperdash-api
-            touch .env
-            echo NFT_STORAGE_API_TOKEN=${{ secrets.TESTNET_NFT_STORAGE_API_TOKEN }} > .env
-            git pull
-            ./run-testnet.sh
-
   notification:
 
-      needs: [deploy]
+      needs: [build]
       if: github.ref == 'refs/heads/develop'
       runs-on: ubuntu-latest
       steps:
@@ -62,4 +42,4 @@ jobs:
           env: 
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
             SLACK_COLOR: ${{ job.status }}
-            SLACK_FOOTER: Powered by CasperDash
+            SLACK_FOOTER: Powered by CasperDash ${{ secrets.SLACK_WEBHOOK }}
