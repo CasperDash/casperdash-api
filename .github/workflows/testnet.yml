@@ -32,7 +32,7 @@ jobs:
   
   notification:
 
-      needs: [deploy]
+      needs: [build]
       if: github.ref == 'refs/heads/develop'
       runs-on: ubuntu-latest
       steps:
