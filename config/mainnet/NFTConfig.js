@@ -53,6 +53,15 @@ const NFT_CONFIG = {
 			},
 		},
 	},
+	'81fe7f478903cb5316d97e91b15b32618cea00910a48c711b60a54fb00f36e3a': {
+		name: 'CasperTigers',
+		symbol: 'CSPR-TIGER',
+		namedKeys: {
+			metadata: {
+				attributes: [{ key: 'asset', name: 'image', massageFnc: CasperPunkImageMassage, strictKey: 'image' }],
+			},
+		},
+	},
 };
 
 module.exports = { NFT_CONFIG };
