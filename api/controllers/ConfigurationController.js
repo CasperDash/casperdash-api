@@ -15,7 +15,7 @@ module.exports = {
 	get: async (req, res) => {
 		res.json({
 			MOTE_RATE,
-			API_VERSION: '1.1.2',
+			API_VERSION: '1.1.6',
 			CSPR_TRANSFER_FEE,
 			CSPR_AUCTION_DELEGATE_FEE,
 			CSPR_AUCTION_UNDELEGATE_FEE,
