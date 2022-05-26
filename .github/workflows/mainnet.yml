@@ -47,7 +47,8 @@ jobs:
             cd ~/stack/projects/casperdash-api
             touch .env
             echo NFT_STORAGE_API_TOKEN=${{ secrets.NFT_STORAGE_API_TOKEN }} > .env
-            git pull
+            git fetch upstream master
+            git pull upstream master
             ./run.sh
 
   notification:
