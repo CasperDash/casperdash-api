@@ -53,7 +53,7 @@ jobs:
 
   notification:
 
-      needs: [deploy]
+      needs: [build]
       if: github.ref == 'refs/heads/develop'
       runs-on: ubuntu-latest
       steps:
@@ -63,4 +63,4 @@ jobs:
           env: 
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
             SLACK_COLOR: ${{ job.status }}
-            SLACK_FOOTER: Powered by CasperDash
+            SLACK_FOOTER: Powered by CasperDash ${{ secrets.SLACK_WEBHOOK }}
