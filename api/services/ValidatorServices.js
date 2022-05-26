@@ -1,3 +1,4 @@
+const { PARTNERSHIP_VALIDATORS } = require('../../constants');
 const CasperServices = require('./CasperServices');
 
 class ValidatorServices {
@@ -37,7 +38,7 @@ class ValidatorServices {
 		}
 
 		validatorsWithBidInfo = this.massageValidators(validatorWeights, bids);
-		return validatorsWithBidInfo;
+		return this.sortValidators(validatorsWithBidInfo);
 	};
 
 	/**
@@ -59,6 +60,32 @@ class ValidatorServices {
 		const bid = bids.find(({ public_key: bidPublicKey }) => bidPublicKey === validatorPublicKey);
 		validator.bidInfo = bid;
 		return validator;
+	};
+	/**
+	 * Sort validators based on PARTNERSHIP_VALIDATORS by
+	 * 1. Sorting the PARTNERSHIP_VALIDATORS
+	 * 2. Remove and insert the found validator in the first position of array.
+	 * @param {array} validators
+	 * @returns {array}
+	 */
+	sortValidators = (validators) => {
+		if (!PARTNERSHIP_VALIDATORS || !PARTNERSHIP_VALIDATORS.length) {
+			return validators;
+		}
+
+		PARTNERSHIP_VALIDATORS.sort((a, b) => a.priority - b.priority).forEach(
+			({ priority, public_key, name, logo }) => {
+				const foundIdx = validators.findIndex((validator) => validator.public_key === public_key);
+				if (foundIdx < 0) {
+					return;
+				}
+				const foundValidator = { ...validators[foundIdx], priority, public_key, name, logo };
+				validators.splice(foundIdx, 1);
+				validators.unshift(foundValidator);
+			},
+		);
+
+		return validators;
 	};
 }
 

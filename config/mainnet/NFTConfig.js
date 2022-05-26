@@ -58,7 +58,7 @@ const NFT_CONFIG = {
 		symbol: 'CSPR-TIGER',
 		namedKeys: {
 			metadata: {
-				attributes: [{ key: 'asset', name: 'image', massageFnc: CasperPunkImageMassage, strictKey: 'image' }],
+				attributes: [{ key: 'image', name: 'image', massageFnc: CasperPunkImageMassage, strictKey: 'image' }],
 			},
 		},
 	},

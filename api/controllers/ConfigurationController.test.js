@@ -8,7 +8,7 @@ test('Should return configuration', () => {
 	configurationController.get(mockRequest, mockResponse);
 	expect(mockJson).toHaveBeenCalled();
 	expect(mockJson).toHaveBeenCalledWith({
-		API_VERSION: '1.1.1',
+		API_VERSION: '1.1.6',
 		CSPR_AUCTION_DELEGATE_FEE: 2.5,
 		CSPR_AUCTION_UNDELEGATE_FEE: 0.00001,
 		CSPR_TRANSFER_FEE: 0.1,
@@ -21,6 +21,14 @@ test('Should return configuration', () => {
 			'b779e1b099e52a86d6d4ac69eb09f0a458e7fda27b1b8fe806d12b00a5723174',
 			'e6376c6f97c9464a79bfc100247bea4ee054b264d19bc9294fc85b151ec3fb8c',
 			'b779E1b099e52A86D6D4Ac69eB09F0a458E7Fda27B1B8Fe806D12b00a5723174',
+		],
+		PARTNERSHIP_VALIDATORS: [
+			{
+				public_key: '01028e248170a7f328bf7a04696d8f271a1debb54763e05e537eefc1cf24531bc7',
+				name: 'OriginStake',
+				logo: 'https://originstake.com/.well-known/casper/originstake_logo_vali_256.png',
+				priority: 10,
+			},
 		],
 	});
 });
